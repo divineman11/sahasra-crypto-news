@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+.turbo/
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+
+# Logs and runtime artifacts
+logs/
+*.log
+*.pid
+
+# TypeScript build info
+tsconfig.tsbuildinfo
+
+# Ingest cache & local databases
+ingest/cache/
+*.db
+*.sqlite
+*.sqlite3
+
+# Test coverage
+coverage/
+
+# Build artifacts
+dist/
+
+# Runtime cache written by the gnews adapter
+app/ingest/cache/gnews_tiers.json

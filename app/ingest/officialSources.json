@@ -1,0 +1,197 @@
+{
+ "_meta": {
+  "purpose": "Curated official project sources (GitHub releases, governance forums, blogs) read by app/ingest/adapters/official.js.",
+  "entry_shape": "{ base: <traded ticker>, type: 'github'|'forum'|'blog', url: <feed url>, name: <display/project name>, verified: false }"
+ },
+ "sources": [
+  {
+   "base": "BTC",
+   "type": "github",
+   "url": "https://github.com/bitcoin/bitcoin/releases.atom",
+   "name": "Bitcoin Core",
+   "verified": false
+  },
+  {
+   "base": "ETH",
+   "type": "github",
+   "url": "https://github.com/ethereum/go-ethereum/releases.atom",
+   "name": "Go Ethereum",
+   "verified": false
+  },
+  {
+   "base": "SOL",
+   "type": "github",
+   "url": "https://github.com/anza-xyz/agave/releases.atom",
+   "name": "Agave",
+   "verified": false
+  },
+  {
+   "base": "SUI",
+   "type": "github",
+   "url": "https://github.com/MystenLabs/sui/releases.atom",
+   "name": "Sui",
+   "verified": false
+  },
+  {
+   "base": "APT",
+   "type": "github",
+   "url": "https://github.com/aptos-labs/aptos-core/releases.atom",
+   "name": "Aptos Core",
+   "verified": false
+  },
+  {
+   "base": "NEAR",
+   "type": "github",
+   "url": "https://github.com/near/nearcore/releases.atom",
+   "name": "NEAR Core",
+   "verified": false
+  },
+  {
+   "base": "ARB",
+   "type": "github",
+   "url": "https://github.com/OffchainLabs/nitro/releases.atom",
+   "name": "Arbitrum Nitro",
+   "verified": false
+  },
+  {
+   "base": "OP",
+   "type": "github",
+   "url": "https://github.com/ethereum-optimism/optimism/releases.atom",
+   "name": "Optimism",
+   "verified": false
+  },
+  {
+   "base": "AVAX",
+   "type": "github",
+   "url": "https://github.com/ava-labs/avalanchego/releases.atom",
+   "name": "AvalancheGo",
+   "verified": false
+  },
+  {
+   "base": "DOT",
+   "type": "github",
+   "url": "https://github.com/paritytech/polkadot-sdk/releases.atom",
+   "name": "Polkadot SDK",
+   "verified": false
+  },
+  {
+   "base": "ATOM",
+   "type": "github",
+   "url": "https://github.com/cosmos/gaia/releases.atom",
+   "name": "Gaia",
+   "verified": false
+  },
+  {
+   "base": "ADA",
+   "type": "github",
+   "url": "https://github.com/IntersectMBO/cardano-node/releases.atom",
+   "name": "Cardano Node",
+   "verified": false
+  },
+  {
+   "base": "XRP",
+   "type": "github",
+   "url": "https://github.com/XRPLF/rippled/releases.atom",
+   "name": "Rippled",
+   "verified": false
+  },
+  {
+   "base": "LTC",
+   "type": "github",
+   "url": "https://github.com/litecoin-project/litecoin/releases.atom",
+   "name": "Litecoin Core",
+   "verified": false
+  },
+  {
+   "base": "DOGE",
+   "type": "github",
+   "url": "https://github.com/dogecoin/dogecoin/releases.atom",
+   "name": "Dogecoin Core",
+   "verified": false
+  },
+  {
+   "base": "TON",
+   "type": "github",
+   "url": "https://github.com/ton-blockchain/ton/releases.atom",
+   "name": "TON",
+   "verified": false
+  },
+  {
+   "base": "SEI",
+   "type": "github",
+   "url": "https://github.com/sei-protocol/sei-chain/releases.atom",
+   "name": "Sei Chain",
+   "verified": false
+  },
+  {
+   "base": "TIA",
+   "type": "github",
+   "url": "https://github.com/celestiaorg/celestia-node/releases.atom",
+   "name": "Celestia Node",
+   "verified": false
+  },
+  {
+   "base": "FIL",
+   "type": "github",
+   "url": "https://github.com/filecoin-project/lotus/releases.atom",
+   "name": "Lotus",
+   "verified": false
+  },
+  {
+   "base": "UNI",
+   "type": "forum",
+   "url": "https://gov.uniswap.org/latest.rss",
+   "name": "Uniswap Governance",
+   "verified": false
+  },
+  {
+   "base": "AAVE",
+   "type": "forum",
+   "url": "https://governance.aave.com/latest.rss",
+   "name": "Aave Governance",
+   "verified": false
+  },
+  {
+   "base": "ARB",
+   "type": "forum",
+   "url": "https://forum.arbitrum.foundation/latest.rss",
+   "name": "Arbitrum Forum",
+   "verified": false
+  },
+  {
+   "base": "OP",
+   "type": "forum",
+   "url": "https://gov.optimism.io/latest.rss",
+   "name": "Optimism Governance",
+   "verified": false
+  },
+  {
+   "base": "LDO",
+   "type": "forum",
+   "url": "https://research.lido.fi/latest.rss",
+   "name": "Lido Research Forum",
+   "verified": false
+  },
+  {
+   "base": "COMP",
+   "type": "forum",
+   "url": "https://www.comp.xyz/latest.rss",
+   "name": "Compound Forum",
+   "verified": false
+  },
+  {
+   "base": "ENS",
+   "type": "forum",
+   "url": "https://discuss.ens.domains/latest.rss",
+   "name": "ENS Forum",
+   "verified": false
+  },
+  {
+   "base": "DYDX",
+   "type": "forum",
+   "url": "https://dydx.forum/latest.rss",
+   "name": "dYdX Forum",
+   "verified": false
+  }
+ ]
+}

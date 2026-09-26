@@ -1,0 +1,192 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --neon-bg: #05060d;
+  --neon-cyan: #00f0ff;
+  --neon-lime: #39ff14;
+  --neon-red: #ff3860;
+  --neon-amber: #ffb000;
+  --neon-magenta: #ff2bd6;
+  --neon-violet: #9d4dff;
+}
+
+body {
+  background-color: var(--neon-bg);
+  background-image:
+    radial-gradient(ellipse at top, rgba(0, 240, 255, 0.08), transparent 60%),
+    radial-gradient(ellipse at bottom right, rgba(255, 43, 214, 0.06), transparent 55%),
+    linear-gradient(rgba(0, 240, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.035) 1px, transparent 1px);
+  background-size: auto, auto, 32px 32px, 32px 32px;
+  background-attachment: fixed;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 240, 255, 0.35) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 240, 255, 0.35);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 240, 255, 0.6);
+}
+
+.text-emerald-400,
+.text-emerald-300 {
+  text-shadow: 0 0 6px rgba(57, 255, 20, 0.55);
+}
+
+.text-rose-400,
+.text-rose-300 {
+  text-shadow: 0 0 6px rgba(255, 56, 96, 0.6);
+}
+
+.text-amber-400,
+.text-amber-300 {
+  text-shadow: 0 0 6px rgba(255, 176, 0, 0.5);
+}
+
+.text-cyan-300,
+.text-cyan-400,
+.text-sky-300,
+.text-sky-400 {
+  text-shadow: 0 0 6px rgba(0, 240, 255, 0.55);
+}
+
+.text-orange-400 {
+  text-shadow: 0 0 6px rgba(255, 43, 214, 0.6);
+}
+
+.border-emerald-500,
+.border-emerald-500\/50,
+.border-emerald-500\/40 {
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.25);
+}
+
+.border-rose-500 {
+  box-shadow: 0 0 8px rgba(255, 56, 96, 0.35);
+}
+
+.border-cyan-500\/30 {
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+}
+
+.bg-slate-900\/95,
+.bg-slate-800\/60 {
+  backdrop-filter: blur(6px);
+}
+
+@keyframes flash {
+  0% {
+    background-color: rgba(0, 240, 255, 0.18);
+    box-shadow: inset 0 0 12px rgba(0, 240, 255, 0.35);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: inset 0 0 12px transparent;
+  }
+}
+
+.row-flash {
+  animation: flash 2s ease-out forwards;
+}
+
+a:hover {
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row-flash {
+    animation: none;
+  }
+}
+/* ───────────────────────── Sahasra branding ─────────────────────────
+   Append to app/src/app/globals.css (after the existing rules).
+   Used by src/components/TopBar.tsx and src/components/SahasraLotus.tsx. */
+
+/* header shell: faint violet aura rising behind the emblem */
+.sahasra-header {
+  position: relative;
+  background:
+    radial-gradient(ellipse 320px 120px at 50% 0%, rgba(157, 77, 255, 0.14), transparent 70%),
+    radial-gradient(ellipse 220px 80px at 50% 100%, rgba(0, 240, 255, 0.05), transparent 70%);
+  box-shadow: inset 0 0 0 1px rgba(157, 77, 255, 0.06);
+}
+
+/* emblem: outer neon bloom (the SVG carries its own inner glow filters) */
+.sahasra-emblem {
+  display: block;
+  overflow: visible;
+  filter: drop-shadow(0 0 7px rgba(157, 77, 255, 0.5)) drop-shadow(0 0 1px rgba(0, 240, 255, 0.35));
+}
+
+/* wordmark: cyan → violet → magenta gradient text with a soft neon halo.
+   text-shadow does not work with background-clip:text, so glow is a drop-shadow. */
+.sahasra-wordmark {
+  background: linear-gradient(90deg, #00f0ff 0%, #9d4dff 50%, #ff2bd6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 6px rgba(157, 77, 255, 0.55)) drop-shadow(0 0 14px rgba(0, 240, 255, 0.18));
+}
+
+/* tagline: muted violet, faint glow */
+.sahasra-tagline {
+  color: #b48cff;
+  text-shadow: 0 0 6px rgba(157, 77, 255, 0.35);
+}
+
+/* hairlines flanking the tagline */
+.sahasra-rule {
+  display: inline-block;
+  width: 26px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.6), transparent);
+}
+
+/* motion: outer petal ring drifts clockwise, seed-dot rim counter-drifts, bindu breathes */
+@keyframes sahasra-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes sahasra-spin-rev {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+@keyframes sahasra-breathe {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; }
+}
+
+.sahasra-ring-outer,
+.sahasra-ring-dots {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+.sahasra-ring-outer { animation: sahasra-spin 140s linear infinite; }
+.sahasra-ring-dots  { animation: sahasra-spin-rev 220s linear infinite; }
+.sahasra-bindu      { animation: sahasra-breathe 6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sahasra-ring-outer,
+  .sahasra-ring-dots,
+  .sahasra-bindu {
+    animation: none;
+  }
+}

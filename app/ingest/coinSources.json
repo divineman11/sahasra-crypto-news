@@ -1,0 +1,638 @@
+{
+ "_meta": {
+  "purpose": "Hand-curated search aliases for large Binance-perp coins whose ticker or name is ambiguous or a common word (NEAR, SUI, ONE...), used by coinMatch.js to confirm a headline is really about the coin. Coins without an entry get a default record."
+ },
+ "AAVE": {
+  "name": "Aave",
+  "aliases": [
+   "Aave",
+   "Aave Labs",
+   "Aave DAO",
+   "AAVE token",
+   "GHO stablecoin"
+  ],
+  "ambiguous": false,
+  "query": "Aave OR \"AAVE token\""
+ },
+ "ADA": {
+  "name": "Cardano",
+  "aliases": [
+   "Cardano",
+   "ADA token",
+   "Input Output Global",
+   "Hoskinson"
+  ],
+  "weak": [
+   "ADA"
+  ],
+  "ambiguous": true,
+  "query": "Cardano OR \"ADA token\""
+ },
+ "AKE": {
+  "name": "Akedo",
+  "aliases": [
+   "Akedo",
+   "AKE token"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "\"Akedo\" OR \"AKE token\""
+ },
+ "ARB": {
+  "name": "Arbitrum",
+  "aliases": [
+   "Arbitrum",
+   "Arbitrum DAO",
+   "Offchain Labs",
+   "ARB token"
+  ],
+  "ambiguous": false,
+  "query": "Arbitrum OR \"ARB token\""
+ },
+ "ARK": {
+  "name": "ARK",
+  "aliases": [
+   "ARK blockchain",
+   "ARK ecosystem",
+   "ARK token",
+   "ARKUSDT",
+   "Ark (ARK)"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "\"ARK blockchain\" OR \"ARK ecosystem\" OR \"ARK token\" OR \"ARKUSDT\" -\"ARK Invest\""
+ },
+ "ASTER": {
+  "name": "Aster",
+  "aliases": [
+   "Aster DEX",
+   "Aster exchange",
+   "ASTER token",
+   "Aster perp",
+   "Aster perpetual",
+   "Aster Chain",
+   "Aster (ASTER)"
+  ],
+  "weak": [
+   "ASTER"
+  ],
+  "ambiguous": true,
+  "query": "Aster crypto OR \"Aster DEX\" OR \"ASTER token\""
+ },
+ "AVAX": {
+  "name": "Avalanche",
+  "aliases": [
+   "Avalanche",
+   "Ava Labs",
+   "Avalanche Foundation",
+   "AVAX token"
+  ],
+  "ambiguous": false,
+  "query": "Avalanche crypto OR AVAX"
+ },
+ "BCH": {
+  "name": "Bitcoin Cash",
+  "aliases": [
+   "Bitcoin Cash",
+   "BCH token"
+  ],
+  "ambiguous": false,
+  "query": "\"Bitcoin Cash\" OR BCH"
+ },
+ "BNB": {
+  "name": "BNB",
+  "aliases": [
+   "BNB",
+   "BNB Chain",
+   "Binance Coin",
+   "BNB Smart Chain",
+   "opBNB"
+  ],
+  "ambiguous": false,
+  "query": "BNB OR \"BNB Chain\""
+ },
+ "BR": {
+  "name": "Bedrock",
+  "aliases": [
+   "Bedrock restaking",
+   "Bedrock DeFi",
+   "Bedrock protocol",
+   "uniBTC",
+   "BR token",
+   "Bedrock (BR)"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "\"Bedrock restaking\" OR \"Bedrock DeFi\" OR uniBTC OR \"BR token\""
+ },
+ "BROCCOLI714": {
+  "name": "Broccoli",
+  "aliases": [
+   "BROCCOLI714",
+   "Broccoli memecoin",
+   "Broccoli meme coin",
+   "Broccoli token",
+   "CZ's dog"
+  ],
+  "weak": [
+   "BROCCOLI"
+  ],
+  "ambiguous": false,
+  "query": "Broccoli memecoin OR BROCCOLI714 OR \"Broccoli token\""
+ },
+ "BTC": {
+  "name": "Bitcoin",
+  "aliases": [
+   "Bitcoin",
+   "BTC"
+  ],
+  "ambiguous": false,
+  "query": "Bitcoin"
+ },
+ "BTW": {
+  "name": "Bitway",
+  "aliases": [
+   "Bitway",
+   "BTW token"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "\"Bitway\" OR \"BTW token\""
+ },
+ "DASH": {
+  "name": "Dash",
+  "aliases": [
+   "Dash cryptocurrency",
+   "Dash coin",
+   "DASH token",
+   "Dash Core",
+   "Dash Platform",
+   "Dash crypto",
+   "Dash (DASH)"
+  ],
+  "weak": [
+   "DASH"
+  ],
+  "ambiguous": true,
+  "query": "Dash crypto OR \"Dash cryptocurrency\" OR \"DASH token\""
+ },
+ "DOGE": {
+  "name": "Dogecoin",
+  "aliases": [
+   "Dogecoin",
+   "DOGE token",
+   "Doge coin"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "Dogecoin"
+ },
+ "ENA": {
+  "name": "Ethena",
+  "aliases": [
+   "Ethena",
+   "Ethena Labs",
+   "USDe",
+   "sUSDe",
+   "ENA token"
+  ],
+  "ambiguous": false,
+  "query": "Ethena OR USDe"
+ },
+ "ETC": {
+  "name": "Ethereum Classic",
+  "aliases": [
+   "Ethereum Classic",
+   "ETC token"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "\"Ethereum Classic\""
+ },
+ "ETH": {
+  "name": "Ethereum",
+  "aliases": [
+   "Ethereum",
+   "Ether",
+   "ETH",
+   "Ethereum Foundation",
+   "Vitalik"
+  ],
+  "ambiguous": false,
+  "query": "Ethereum"
+ },
+ "FET": {
+  "name": "Artificial Superintelligence Alliance",
+  "aliases": [
+   "Fetch.ai",
+   "Fetch AI",
+   "ASI Alliance",
+   "Artificial Superintelligence Alliance",
+   "SingularityNET",
+   "FET token"
+  ],
+  "weak": [
+   "FET"
+  ],
+  "ambiguous": false,
+  "query": "\"Fetch.ai\" OR \"ASI Alliance\" OR \"Artificial Superintelligence Alliance\" OR \"FET token\""
+ },
+ "FIL": {
+  "name": "Filecoin",
+  "aliases": [
+   "Filecoin",
+   "FIL token",
+   "Protocol Labs"
+  ],
+  "ambiguous": false,
+  "query": "Filecoin"
+ },
+ "HYPE": {
+  "name": "Hyperliquid",
+  "aliases": [
+   "Hyperliquid",
+   "Hyperliquid Labs",
+   "HyperEVM",
+   "HYPE token"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "Hyperliquid"
+ },
+ "INJ": {
+  "name": "Injective",
+  "aliases": [
+   "Injective",
+   "Injective Protocol",
+   "INJ token"
+  ],
+  "ambiguous": false,
+  "query": "Injective"
+ },
+ "LINK": {
+  "name": "Chainlink",
+  "aliases": [
+   "Chainlink",
+   "Chainlink Labs",
+   "LINK token",
+   "CCIP"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "Chainlink"
+ },
+ "LIT": {
+  "name": "Lighter",
+  "aliases": [
+   "Lighter DEX",
+   "Lighter exchange",
+   "Lighter perp",
+   "Lighter protocol",
+   "Lighter ETP",
+   "LIT token",
+   "Lighter (LIT)"
+  ],
+  "weak": [
+   "Lighter",
+   "LIT"
+  ],
+  "ambiguous": true,
+  "query": "Lighter crypto OR \"Lighter DEX\" OR \"LIT token\""
+ },
+ "LSK": {
+  "name": "Lisk",
+  "aliases": [
+   "Lisk",
+   "LSK token"
+  ],
+  "ambiguous": false,
+  "query": "Lisk crypto OR \"LSK token\""
+ },
+ "LTC": {
+  "name": "Litecoin",
+  "aliases": [
+   "Litecoin",
+   "LTC token"
+  ],
+  "ambiguous": false,
+  "query": "Litecoin"
+ },
+ "MUBARAK": {
+  "name": "Mubarak",
+  "aliases": [
+   "Mubarak memecoin",
+   "Mubarak meme coin",
+   "MUBARAK token",
+   "Mubarak (MUBARAK)"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "Mubarak memecoin OR \"MUBARAK token\""
+ },
+ "NEAR": {
+  "name": "NEAR Protocol",
+  "aliases": [
+   "NEAR Protocol",
+   "NEAR Foundation",
+   "NEAR token",
+   "NEAR blockchain",
+   "NEAR AI",
+   "NEAR Intents"
+  ],
+  "weak": [
+   "NEAR"
+  ],
+  "ambiguous": true,
+  "query": "\"NEAR Protocol\" OR \"NEAR Foundation\" OR \"NEAR token\""
+ },
+ "NIL": {
+  "name": "Nillion",
+  "aliases": [
+   "Nillion",
+   "NIL token"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "Nillion"
+ },
+ "ONDO": {
+  "name": "Ondo",
+  "aliases": [
+   "Ondo Finance",
+   "ONDO token",
+   "Ondo Global Markets",
+   "Ondo Chain",
+   "Ondo (ONDO)"
+  ],
+  "weak": [
+   "ONDO"
+  ],
+  "ambiguous": true,
+  "query": "\"Ondo Finance\" OR \"ONDO token\" OR Ondo crypto"
+ },
+ "ONE": {
+  "name": "Harmony",
+  "aliases": [
+   "Harmony ONE",
+   "Harmony blockchain",
+   "Harmony Protocol",
+   "Harmony network",
+   "ONE token",
+   "Harmony (ONE)"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "\"Harmony ONE\" OR \"Harmony blockchain\" OR \"Harmony Protocol\""
+ },
+ "PENGU": {
+  "name": "Pudgy Penguins",
+  "aliases": [
+   "Pudgy Penguins",
+   "Pudgy Penguin",
+   "PENGU"
+  ],
+  "ambiguous": false,
+  "query": "\"Pudgy Penguins\" OR PENGU"
+ },
+ "PEPE": {
+  "name": "Pepe",
+  "aliases": [
+   "Pepe coin",
+   "PEPE token",
+   "Pepe memecoin",
+   "Pepe meme coin",
+   "Pepe (PEPE)"
+  ],
+  "weak": [
+   "PEPE"
+  ],
+  "ambiguous": true,
+  "query": "Pepe crypto OR \"PEPE token\" OR \"Pepe coin\""
+ },
+ "PHA": {
+  "name": "Phala Network",
+  "aliases": [
+   "Phala Network",
+   "PHA token",
+   "Phala Cloud"
+  ],
+  "ambiguous": true,
+  "query": "\"Phala Network\" OR \"PHA token\"",
+  "weak": [
+   "PHA"
+  ]
+ },
+ "PUMP": {
+  "name": "Pump.fun",
+  "aliases": [
+   "Pump.fun",
+   "Pump(dot)fun",
+   "PumpFun",
+   "Pump fun",
+   "PumpSwap",
+   "PUMP token",
+   "Pump.fun (PUMP)"
+  ],
+  "weak": [
+   "PUMP"
+  ],
+  "ambiguous": true,
+  "query": "\"Pump.fun\" OR \"PUMP token\""
+ },
+ "QNT": {
+  "name": "Quant",
+  "aliases": [
+   "Quant Network",
+   "QNT token",
+   "Overledger",
+   "Quant (QNT)"
+  ],
+  "weak": [
+   "QNT"
+  ],
+  "ambiguous": true,
+  "query": "\"Quant Network\" OR \"QNT token\" OR Quant crypto"
+ },
+ "SAGA": {
+  "name": "Saga",
+  "aliases": [
+   "Saga blockchain",
+   "Saga chainlets",
+   "Saga Protocol",
+   "Saga mainnet",
+   "SAGA token",
+   "Saga (SAGA)"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "\"Saga blockchain\" OR \"Saga chainlets\" OR \"SAGA token\" OR Saga crypto"
+ },
+ "SOL": {
+  "name": "Solana",
+  "aliases": [
+   "Solana",
+   "Solana Foundation",
+   "Solana Labs",
+   "SOL token"
+  ],
+  "ambiguous": false,
+  "query": "Solana"
+ },
+ "SUI": {
+  "name": "Sui",
+  "aliases": [
+   "Sui Network",
+   "Sui blockchain",
+   "SUI token",
+   "Mysten Labs",
+   "Sui Foundation",
+   "Sui ecosystem",
+   "Sui testnet",
+   "Sui mainnet",
+   "Sui (SUI)"
+  ],
+  "weak": [
+   "Sui",
+   "SUI"
+  ],
+  "ambiguous": true,
+  "query": "Sui crypto OR \"Sui Network\" OR \"SUI token\""
+ },
+ "TAO": {
+  "name": "Bittensor",
+  "aliases": [
+   "Bittensor",
+   "Bittensor subnet",
+   "TAO token"
+  ],
+  "weak": [
+   "TAO"
+  ],
+  "ambiguous": true,
+  "query": "Bittensor OR \"TAO token\""
+ },
+ "TRUMP": {
+  "name": "Official Trump",
+  "aliases": [
+   "Official Trump",
+   "TRUMP memecoin",
+   "TRUMP meme coin",
+   "TRUMP token",
+   "TRUMP coin",
+   "Trump (TRUMP)"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "\"Official Trump\" OR \"TRUMP memecoin\" OR \"TRUMP meme coin\" OR \"$TRUMP\""
+ },
+ "UNI": {
+  "name": "Uniswap",
+  "aliases": [
+   "Uniswap",
+   "Uniswap Labs",
+   "Uniswap Foundation",
+   "Unichain",
+   "UNI token"
+  ],
+  "weak": [],
+  "ambiguous": true,
+  "query": "Uniswap"
+ },
+ "WLD": {
+  "name": "Worldcoin",
+  "aliases": [
+   "Worldcoin",
+   "World Network",
+   "World ID",
+   "World App",
+   "Tools for Humanity",
+   "WLD token"
+  ],
+  "ambiguous": false,
+  "query": "Worldcoin OR \"World Network\" OR \"Tools for Humanity\""
+ },
+ "XLM": {
+  "name": "Stellar",
+  "aliases": [
+   "Stellar Lumens",
+   "Stellar network",
+   "Stellar blockchain",
+   "Stellar Development Foundation",
+   "XLM",
+   "Stellar (XLM)"
+  ],
+  "weak": [
+   "XLM"
+  ],
+  "ambiguous": false,
+  "query": "\"Stellar Lumens\" OR XLM OR \"Stellar network\""
+ },
+ "XMR": {
+  "name": "Monero",
+  "aliases": [
+   "Monero",
+   "XMR"
+  ],
+  "ambiguous": false,
+  "query": "Monero"
+ },
+ "XPL": {
+  "name": "Plasma",
+  "aliases": [
+   "Plasma blockchain",
+   "Plasma XPL",
+   "Plasma stablecoin",
+   "Plasma mainnet",
+   "Plasma chain",
+   "Plasma One",
+   "XPL token",
+   "Plasma (XPL)"
+  ],
+  "weak": [
+   "Plasma",
+   "XPL"
+  ],
+  "ambiguous": false,
+  "query": "Plasma crypto OR \"Plasma blockchain\" OR XPL"
+ },
+ "XRP": {
+  "name": "XRP",
+  "aliases": [
+   "XRP",
+   "Ripple Labs",
+   "XRP Ledger",
+   "XRPL",
+   "Ripple"
+  ],
+  "ambiguous": false,
+  "query": "XRP OR Ripple crypto"
+ },
+ "ZEC": {
+  "name": "Zcash",
+  "aliases": [
+   "Zcash",
+   "ZEC token",
+   "Electric Coin Company"
+  ],
+  "ambiguous": false,
+  "query": "Zcash"
+ },
+ "SEI": {
+  "name": "Sei",
+  "aliases": [
+   "Sei Network",
+   "Sei blockchain",
+   "SEI token",
+   "Sei Labs",
+   "Sei Foundation",
+   "Sei (SEI)",
+   "Sei EVM"
+  ],
+  "weak": [
+   "Sei",
+   "SEI"
+  ],
+  "ambiguous": true,
+  "query": "\"Sei Network\" OR \"Sei blockchain\" OR \"SEI token\""
+ }
+}

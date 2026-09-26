@@ -1,0 +1,41 @@
+{
+  "name": "crypto-news-terminal",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -H 127.0.0.1 -p 4180",
+    "build": "next build",
+    "start": "next start -H 127.0.0.1 -p 4180",
+    "ws": "node ws-server.js",
+    "ingest": "node ingest.js",
+    "db:push": "prisma db push",
+    "db:seed": "node prisma/seed.js",
+    "redis": "wsl -d Ubuntu -u root -- sh -c \"redis-cli ping >/dev/null 2>&1 && exec sleep infinity || exec redis-server /etc/redis/redis.conf --daemonize no\"",
+    "redis:start": "npm run redis",
+    "all": "concurrently --restart-tries 3 --restart-after 2000 -n redis,next,ws,ingest -c red,cyan,magenta,yellow \"npm:redis\" \"npm:dev\" \"npm:ws\" \"npm:ingest\""
+  },
+  "dependencies": {
+    "@prisma/client": "^6.2.0",
+    "dotenv": "^16.4.0",
+    "ioredis": "^5.4.0",
+    "lucide-react": "^0.469.0",
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "rss-parser": "^3.13.0",
+    "ws": "^8.18.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/ws": "^8.0.0",
+    "autoprefixer": "^10.4.0",
+    "concurrently": "^9.1.0",
+    "postcss": "^8.4.0",
+    "prisma": "^6.2.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.7.0"
+  }
+}

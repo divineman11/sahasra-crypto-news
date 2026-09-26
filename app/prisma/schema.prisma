@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id           String       @id @default(uuid())
+  title        String
+  url          String       @unique
+  sourceDomain String
+  publishedAt  DateTime
+  kind         String       // "news", "exchange", "regulator", "symbol" (legacy: "media", "blog")
+  sentiment    String       // "bullish", "bearish", "neutral"
+  instruments  Instrument[]
+  votes        VoteData?
+  createdAt    DateTime     @default(now())
+
+  firstSeenAt       DateTime  @default(now())
+  sourceName        String    @default("mock")
+  sourceTier        Int       @default(4)
+  category          String    @default("other")
+  importance        Int       @default(20)
+  exchange          String?
+  storyId           String?
+  simhash           String?
+  announcementSeenAt DateTime?
+  symbolSeenAt      DateTime?
+  userLabel         String?
+  priceTicker       String?
+  priceStatus       String    @default("na")
+  p0                Float?
+  ret1m             Float?
+  ret5m             Float?
+  ret15m            Float?
+  moved5m           Boolean?
+  hotPublishedAt    DateTime?
+  alertState        String? // "pending" | "sent" | "failed" | "skip"; null = not eligible
+  alertAttempts     Int       @default(0)
+  alertSentAt       DateTime?
+  alertNextAt       DateTime?
+
+  @@index([publishedAt])
+  @@index([firstSeenAt])
+  @@index([storyId])
+  @@index([category])
+  @@index([priceStatus])
+  @@index([hotPublishedAt])
+  @@index([alertState])
+}
+
+model KnownSymbol {
+  id          String    @id @default(uuid())
+  venue       String
+  symbol      String
+  firstSeenAt DateTime  @default(now())
+  pendingEmit Boolean   @default(false)
+  emittedAt   DateTime?
+
+  @@unique([venue, symbol])
+  @@index([venue, pendingEmit])
+}
+
+model Instrument {
+  id     String @id @default(uuid())
+  ticker String @unique
+  name   String
+  posts  Post[]
+}
+
+model VoteData {
+  id        String @id @default(uuid())
+  postId    String @unique
+  post      Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  bullish   Int    @default(0)
+  bearish   Int    @default(0)
+  important Int    @default(0)
+  toxic     Int    @default(0)
+}
