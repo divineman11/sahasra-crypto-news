@@ -1,10 +1,15 @@
-# Sahasra — the final path to the Oneness
+<p align="center">
+  <img src="docs/banner.png" alt="Sahasra — the final path to the Oneness" width="100%">
+</p>
+
+<h1 align="center">Sahasra</h1>
+<p align="center"><i>the final path to the Oneness</i></p>
 
 A self-hosted, real-time **crypto news terminal** in the spirit of CryptoPanic — free, runs on your own machine, works on **Windows, macOS and Linux**.
 
 It collects crypto news from exchanges, publishers, Google News, Telegram wires, official project releases, YouTube, Reddit and Bluesky; tags every story with the coins it is about; groups duplicates into stories; scores importance and sentiment; and shows everything in a fast Bloomberg-style web terminal with per-coin pages and search.
 
-![stack](https://img.shields.io/badge/Next.js-15-black) ![stack](https://img.shields.io/badge/PostgreSQL-Prisma-336791) ![stack](https://img.shields.io/badge/Node-20%2B-339933)
+<p align="center"><img src="https://img.shields.io/badge/Next.js-15-black"> <img src="https://img.shields.io/badge/PostgreSQL-Prisma-336791"> <img src="https://img.shields.io/badge/Node-20%2B-339933"> <img src="https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-supported-9d4dff"></p>
 
 ---
 

@@ -1,0 +1,140 @@
+<svg width="256" height="256" viewBox="-6 -6 212 212" role="img" aria-label="Sahasra" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="sahasra-g-outer" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#9d4dff"/><stop offset="1" stop-color="#ff2bd6"/></linearGradient>
+<linearGradient id="sahasra-g-r2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ff2bd6"/><stop offset="1" stop-color="#9d4dff"/></linearGradient>
+<linearGradient id="sahasra-g-r3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#9d4dff"/><stop offset="1" stop-color="#00f0ff"/></linearGradient>
+<linearGradient id="sahasra-g-inner" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#00f0ff"/><stop offset="1" stop-color="#ffffff"/></linearGradient>
+<radialGradient id="sahasra-g-bindu" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffffff"/><stop offset="0.35" stop-color="#ffd166"/><stop offset="0.75" stop-color="#ff2bd6"/><stop offset="1" stop-color="#ff2bd6" stop-opacity="0"/></radialGradient>
+<radialGradient id="sahasra-g-halo" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffb000" stop-opacity="0.9"/><stop offset="0.5" stop-color="#ff2bd6" stop-opacity="0.35"/><stop offset="1" stop-color="#9d4dff" stop-opacity="0"/></radialGradient>
+<filter id="sahasra-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="sahasra-glow-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+<path id="sahasra-petal-outer" d="M100 40 C111 31.04 109.02 18.24 100 8 C90.98 18.24 89 31.04 100 40Z" />
+<path id="sahasra-petal-r2" d="M100 56 C112 47.6 109.84 35.6 100 26 C90.16 35.6 88 47.6 100 56Z" />
+<path id="sahasra-vein-r2" d="M100 54 L100 37.4" />
+<path id="sahasra-petal-r3" d="M100 70 C111.5 62.72 109.43 52.32 100 44 C90.57 52.32 88.5 62.72 100 70Z" />
+<path id="sahasra-vein-r3" d="M100 68 L100 53.88" />
+<path id="sahasra-petal-inner" d="M100 84 C111 77.28 109.02 67.68 100 60 C90.98 67.68 89 77.28 100 84Z" />
+<path id="sahasra-vein-inner" d="M100 82 L100 69.12" />
+</defs>
+<circle cx="100" cy="100" r="96" fill="url(#sahasra-g-halo)" opacity="0.4" filter="url(#sahasra-glow-soft)"/>
+<g class="sahasra-ring-dots" fill="#ffb000" opacity="0.6"><circle cx="100.00" cy="3.00" r="1.0"/><circle cx="108.45" cy="3.37" r="0.6"/><circle cx="116.84" cy="4.47" r="0.6"/><circle cx="125.11" cy="6.31" r="1.0"/><circle cx="133.18" cy="8.85" r="0.6"/><circle cx="140.99" cy="12.09" r="0.6"/><circle cx="148.50" cy="16.00" r="1.0"/><circle cx="155.64" cy="20.54" r="0.6"/><circle cx="162.35" cy="25.69" r="0.6"/><circle cx="168.59" cy="31.41" r="1.0"/><circle cx="174.31" cy="37.65" r="0.6"/><circle cx="179.46" cy="44.36" r="0.6"/><circle cx="184.00" cy="51.50" r="1.0"/><circle cx="187.91" cy="59.01" r="0.6"/><circle cx="191.15" cy="66.82" r="0.6"/><circle cx="193.69" cy="74.89" r="1.0"/><circle cx="195.53" cy="83.16" r="0.6"/><circle cx="196.63" cy="91.55" r="0.6"/><circle cx="197.00" cy="100.00" r="1.0"/><circle cx="196.63" cy="108.45" r="0.6"/><circle cx="195.53" cy="116.84" r="0.6"/><circle cx="193.69" cy="125.11" r="1.0"/><circle cx="191.15" cy="133.18" r="0.6"/><circle cx="187.91" cy="140.99" r="0.6"/><circle cx="184.00" cy="148.50" r="1.0"/><circle cx="179.46" cy="155.64" r="0.6"/><circle cx="174.31" cy="162.35" r="0.6"/><circle cx="168.59" cy="168.59" r="1.0"/><circle cx="162.35" cy="174.31" r="0.6"/><circle cx="155.64" cy="179.46" r="0.6"/><circle cx="148.50" cy="184.00" r="1.0"/><circle cx="140.99" cy="187.91" r="0.6"/><circle cx="133.18" cy="191.15" r="0.6"/><circle cx="125.11" cy="193.69" r="1.0"/><circle cx="116.84" cy="195.53" r="0.6"/><circle cx="108.45" cy="196.63" r="0.6"/><circle cx="100.00" cy="197.00" r="1.0"/><circle cx="91.55" cy="196.63" r="0.6"/><circle cx="83.16" cy="195.53" r="0.6"/><circle cx="74.89" cy="193.69" r="1.0"/><circle cx="66.82" cy="191.15" r="0.6"/><circle cx="59.01" cy="187.91" r="0.6"/><circle cx="51.50" cy="184.00" r="1.0"/><circle cx="44.36" cy="179.46" r="0.6"/><circle cx="37.65" cy="174.31" r="0.6"/><circle cx="31.41" cy="168.59" r="1.0"/><circle cx="25.69" cy="162.35" r="0.6"/><circle cx="20.54" cy="155.64" r="0.6"/><circle cx="16.00" cy="148.50" r="1.0"/><circle cx="12.09" cy="140.99" r="0.6"/><circle cx="8.85" cy="133.18" r="0.6"/><circle cx="6.31" cy="125.11" r="1.0"/><circle cx="4.47" cy="116.84" r="0.6"/><circle cx="3.37" cy="108.45" r="0.6"/><circle cx="3.00" cy="100.00" r="1.0"/><circle cx="3.37" cy="91.55" r="0.6"/><circle cx="4.47" cy="83.16" r="0.6"/><circle cx="6.31" cy="74.89" r="1.0"/><circle cx="8.85" cy="66.82" r="0.6"/><circle cx="12.09" cy="59.01" r="0.6"/><circle cx="16.00" cy="51.50" r="1.0"/><circle cx="20.54" cy="44.36" r="0.6"/><circle cx="25.69" cy="37.65" r="0.6"/><circle cx="31.41" cy="31.41" r="1.0"/><circle cx="37.65" cy="25.69" r="0.6"/><circle cx="44.36" cy="20.54" r="0.6"/><circle cx="51.50" cy="16.00" r="1.0"/><circle cx="59.01" cy="12.09" r="0.6"/><circle cx="66.82" cy="8.85" r="0.6"/><circle cx="74.89" cy="6.31" r="1.0"/><circle cx="83.16" cy="4.47" r="0.6"/><circle cx="91.55" cy="3.37" r="0.6"/></g>
+<circle cx="100" cy="100" r="100" fill="none" stroke="#ffb000" stroke-width="0.5" opacity="0.35"/>
+<circle cx="100" cy="100" r="94" fill="none" stroke="#9d4dff" stroke-width="0.4" opacity="0.35"/>
+<g filter="url(#sahasra-glow)">
+<g class="sahasra-ring-outer" fill="url(#sahasra-g-outer)" fill-opacity="0.16" stroke="#c084ff" stroke-opacity="0.85" stroke-width="0.9" stroke-linejoin="round">
+<use href="#sahasra-petal-outer" transform="rotate(0 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(15 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(30 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(45 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(60 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(75 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(90 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(105 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(120 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(135 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(150 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(165 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(180 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(195 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(210 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(225 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(240 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(255 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(270 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(285 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(300 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(315 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(330 100 100)"/>
+<use href="#sahasra-petal-outer" transform="rotate(345 100 100)"/>
+</g>
+<g fill="url(#sahasra-g-r2)" fill-opacity="0.22" stroke="#ff2bd6" stroke-opacity="0.8" stroke-width="0.9" stroke-linejoin="round">
+<use href="#sahasra-petal-r2" transform="rotate(11.25 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(33.75 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(56.25 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(78.75 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(101.25 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(123.75 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(146.25 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(168.75 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(191.25 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(213.75 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(236.25 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(258.75 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(281.25 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(303.75 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(326.25 100 100)"/>
+<use href="#sahasra-petal-r2" transform="rotate(348.75 100 100)"/>
+<g stroke-width="0.6" stroke-opacity="0.35" fill="none">
+<use href="#sahasra-vein-r2" transform="rotate(11.25 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(33.75 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(56.25 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(78.75 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(101.25 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(123.75 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(146.25 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(168.75 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(191.25 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(213.75 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(236.25 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(258.75 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(281.25 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(303.75 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(326.25 100 100)"/>
+<use href="#sahasra-vein-r2" transform="rotate(348.75 100 100)"/>
+</g>
+</g>
+<g fill="url(#sahasra-g-r3)" fill-opacity="0.26" stroke="#00f0ff" stroke-opacity="0.75" stroke-width="0.9" stroke-linejoin="round">
+<use href="#sahasra-petal-r3" transform="rotate(15 100 100)"/>
+<use href="#sahasra-petal-r3" transform="rotate(45 100 100)"/>
+<use href="#sahasra-petal-r3" transform="rotate(75 100 100)"/>
+<use href="#sahasra-petal-r3" transform="rotate(105 100 100)"/>
+<use href="#sahasra-petal-r3" transform="rotate(135 100 100)"/>
+<use href="#sahasra-petal-r3" transform="rotate(165 100 100)"/>
+<use href="#sahasra-petal-r3" transform="rotate(195 100 100)"/>
+<use href="#sahasra-petal-r3" transform="rotate(225 100 100)"/>
+<use href="#sahasra-petal-r3" transform="rotate(255 100 100)"/>
+<use href="#sahasra-petal-r3" transform="rotate(285 100 100)"/>
+<use href="#sahasra-petal-r3" transform="rotate(315 100 100)"/>
+<use href="#sahasra-petal-r3" transform="rotate(345 100 100)"/>
+<g stroke-width="0.6" stroke-opacity="0.35" fill="none">
+<use href="#sahasra-vein-r3" transform="rotate(15 100 100)"/>
+<use href="#sahasra-vein-r3" transform="rotate(45 100 100)"/>
+<use href="#sahasra-vein-r3" transform="rotate(75 100 100)"/>
+<use href="#sahasra-vein-r3" transform="rotate(105 100 100)"/>
+<use href="#sahasra-vein-r3" transform="rotate(135 100 100)"/>
+<use href="#sahasra-vein-r3" transform="rotate(165 100 100)"/>
+<use href="#sahasra-vein-r3" transform="rotate(195 100 100)"/>
+<use href="#sahasra-vein-r3" transform="rotate(225 100 100)"/>
+<use href="#sahasra-vein-r3" transform="rotate(255 100 100)"/>
+<use href="#sahasra-vein-r3" transform="rotate(285 100 100)"/>
+<use href="#sahasra-vein-r3" transform="rotate(315 100 100)"/>
+<use href="#sahasra-vein-r3" transform="rotate(345 100 100)"/>
+</g>
+</g>
+<g fill="url(#sahasra-g-inner)" fill-opacity="0.42" stroke="#bffcff" stroke-opacity="0.9" stroke-width="1.0" stroke-linejoin="round">
+<use href="#sahasra-petal-inner" transform="rotate(22.5 100 100)"/>
+<use href="#sahasra-petal-inner" transform="rotate(67.5 100 100)"/>
+<use href="#sahasra-petal-inner" transform="rotate(112.5 100 100)"/>
+<use href="#sahasra-petal-inner" transform="rotate(157.5 100 100)"/>
+<use href="#sahasra-petal-inner" transform="rotate(202.5 100 100)"/>
+<use href="#sahasra-petal-inner" transform="rotate(247.5 100 100)"/>
+<use href="#sahasra-petal-inner" transform="rotate(292.5 100 100)"/>
+<use href="#sahasra-petal-inner" transform="rotate(337.5 100 100)"/>
+<g stroke-width="0.6" stroke-opacity="0.35" fill="none">
+<use href="#sahasra-vein-inner" transform="rotate(22.5 100 100)"/>
+<use href="#sahasra-vein-inner" transform="rotate(67.5 100 100)"/>
+<use href="#sahasra-vein-inner" transform="rotate(112.5 100 100)"/>
+<use href="#sahasra-vein-inner" transform="rotate(157.5 100 100)"/>
+<use href="#sahasra-vein-inner" transform="rotate(202.5 100 100)"/>
+<use href="#sahasra-vein-inner" transform="rotate(247.5 100 100)"/>
+<use href="#sahasra-vein-inner" transform="rotate(292.5 100 100)"/>
+<use href="#sahasra-vein-inner" transform="rotate(337.5 100 100)"/>
+</g>
+</g>
+</g>
+<circle cx="100" cy="100" r="13.5" fill="#05060d" fill-opacity="0.55"/>
+<circle cx="100" cy="100" r="13.5" fill="none" stroke="#ffb000" stroke-width="1.1" opacity="0.9" filter="url(#sahasra-glow)"/>
+<g fill="none" stroke="#ffd166" stroke-width="0.7" opacity="0.6"><polygon points="100.00,89.50 109.09,105.25 90.91,105.25"/><polygon points="100.00,110.50 90.91,94.75 109.09,94.75"/></g>
+<circle class="sahasra-bindu" cx="100" cy="100" r="10" fill="url(#sahasra-g-bindu)" opacity="0.55" filter="url(#sahasra-glow-soft)"/>
+<circle class="sahasra-bindu" cx="100" cy="100" r="5" fill="url(#sahasra-g-bindu)"/>
+</svg>
