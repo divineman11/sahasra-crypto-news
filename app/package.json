@@ -8,11 +8,14 @@
     "start": "next start -H 127.0.0.1 -p 4180",
     "ws": "node ws-server.js",
     "ingest": "node ingest.js",
+    "ingest:lite": "node scripts/with-env.js NEWS_REDIS=off -- node ingest.js",
     "db:push": "prisma db push",
     "db:seed": "node prisma/seed.js",
-    "redis": "wsl -d Ubuntu -u root -- sh -c \"redis-cli ping >/dev/null 2>&1 && exec sleep infinity || exec redis-server /etc/redis/redis.conf --daemonize no\"",
+    "redis": "node scripts/redis.js",
     "redis:start": "npm run redis",
-    "all": "concurrently --restart-tries 3 --restart-after 2000 -n redis,next,ws,ingest -c red,cyan,magenta,yellow \"npm:redis\" \"npm:dev\" \"npm:ws\" \"npm:ingest\""
+    "all": "concurrently --restart-tries 3 --restart-after 2000 -n redis,next,ws,ingest -c red,cyan,magenta,yellow \"npm:redis\" \"npm:dev\" \"npm:ws\" \"npm:ingest\"",
+    "all:lite": "concurrently --restart-tries 3 --restart-after 2000 -n next,ingest -c cyan,yellow \"npm:dev\" \"npm:ingest:lite\"",
+    "all:prod": "concurrently --restart-tries 3 --restart-after 2000 -n redis,web,ws,ingest -c red,cyan,magenta,yellow \"npm:redis\" \"npm:start\" \"npm:ws\" \"npm:ingest\""
   },
   "dependencies": {
     "@prisma/client": "^6.2.0",

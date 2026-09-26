@@ -39,11 +39,16 @@ function pidAlive(pid) {
 
 function pidIsNode(pid) {
   try {
-    const out = require('child_process').execFileSync('tasklist',
-      ['/FI', 'PID eq ' + pid, '/FO', 'CSV', '/NH'], { encoding: 'utf8' });
-    return out.includes('"node.exe"');
+    if (process.platform === 'win32') {
+      const out = require('child_process').execFileSync('tasklist',
+        ['/FI', 'PID eq ' + pid, '/FO', 'CSV', '/NH'], { encoding: 'utf8' });
+      return out.includes('"node.exe"');
+    }
+    const output = require('child_process').execFileSync('ps',
+      ['-p', String(pid), '-o', 'comm='], { encoding: 'utf8' });
+    return /node/i.test(output);
   } catch (e) {
-    return true; // fail closed: if tasklist cannot verify, assume the pid is a live supervisor
+    return true; // fail closed: if the check cannot verify, assume the pid is a live supervisor
   }
 }
 
@@ -167,22 +172,33 @@ function logSuper(msg) {
 createPidLock();
 
 // ---- Service definitions ----
-// Redis (WSL) is only started in --with-ui mode; without it, ingest runs with
-// NEWS_REDIS=off so no WSL VM (~1 GB RAM) is required.
+// Redis runs in WSL on Windows, natively (scripts/redis.js) on macOS/Linux.
+// Redis is only started in --with-ui mode; without it, ingest runs with
+// NEWS_REDIS=off so no WSL VM (~1 GB RAM) is required on Windows.
 let redisStarted = false;
 
 const SERVICES = [];
 
 if (withUI) {
-  SERVICES.push({
-    name: 'redis',
-    command: 'wsl.exe',
-    args: ['-d', 'Ubuntu', '-u', 'root', '--', 'sh', '-c',
-      'redis-cli ping >/dev/null 2>&1 && exec sleep infinity || exec redis-server /etc/redis/redis.conf --daemonize no'],
-    delay: 0,
-    isWsl: true,
-    onStart() { redisStarted = true; }
-  });
+  if (process.platform === 'win32') {
+    SERVICES.push({
+      name: 'redis',
+      command: 'wsl.exe',
+      args: ['-d', 'Ubuntu', '-u', 'root', '--', 'sh', '-c',
+        'redis-cli ping >/dev/null 2>&1 && exec sleep infinity || exec redis-server /etc/redis/redis.conf --daemonize no'],
+      delay: 0,
+      isWsl: true,
+      onStart() { redisStarted = true; }
+    });
+  } else {
+    SERVICES.push({
+      name: 'redis',
+      command: process.execPath,
+      args: [path.join('scripts', 'redis.js')],
+      delay: 0,
+      onStart() { redisStarted = true; }
+    });
+  }
   SERVICES.push({ name: 'ingest', command: process.execPath, args: ['ingest.js'], delay: 8000 });
 } else {
   SERVICES.push({
@@ -313,8 +329,8 @@ function shutdown() {
     }
   }
 
-  // Best-effort Redis shutdown inside WSL (only if we started redis)
-  if (redisStarted) {
+  // Best-effort Redis shutdown inside WSL (only if we started redis via WSL on Windows)
+  if (process.platform === 'win32' && redisStarted) {
     try {
       execFile('wsl.exe', ['-d', 'Ubuntu', '-u', 'root', '--', 'redis-cli', 'shutdown', 'nosave'],
         { windowsHide: true }, () => { /* best-effort */ });

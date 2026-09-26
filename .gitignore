@@ -19,7 +19,7 @@ logs/
 tsconfig.tsbuildinfo
 
 # Ingest cache & local databases
-ingest/cache/
+**/ingest/cache/
 *.db
 *.sqlite
 *.sqlite3
@@ -32,3 +32,6 @@ dist/
 
 # Runtime cache written by the gnews adapter
 app/ingest/cache/gnews_tiers.json
+
+# Runtime output
+**/news_live.json
