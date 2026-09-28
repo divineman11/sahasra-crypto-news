@@ -93,7 +93,7 @@ class Store {
         const lastRevised = this.revisedAt.get(raw.url);
         if (lastRevised && Date.now() - lastRevised < 10 * 60e3) return null;
         // Title changed at the same URL → a correction/revision.
-        const tickers = tagTickers(raw.title, raw.hintTickers || [], { kind: raw.kind });
+        const tickers = raw.kind === 'politics' ? [] : tagTickers(raw.title, raw.hintTickers || [], { kind: raw.kind });
         const keepDetail = tickers.length === 0 && (known.detail === undefined || (Array.isArray(known.detail) && known.detail.length > 0));
         const effTickers = keepDetail && Array.isArray(known.detail) ? known.detail : tickers;
         const cls = classify(raw, effTickers);
@@ -136,7 +136,8 @@ class Store {
         const dom = raw.sourceDomain || new URL(raw.url).hostname.replace(/^www\./, '');
         if (this.titleKeys.has(normalize(raw.title) + '|' + dom)) return null; // a direct copy already exists
       }
-      let tickers = tagTickers(raw.title, raw.hintTickers || [], { kind: raw.kind });
+      // Trump-section items (kind "politics") are never tagged with coins, see adapters/trump.js.
+      let tickers = raw.kind === 'politics' ? [] : tagTickers(raw.title, raw.hintTickers || [], { kind: raw.kind });
       let cls = classify(raw, tickers);
       const needsDetail = raw.kind === 'exchange' && tickers.length === 0 &&
         (cls.category === 'listing' || cls.category === 'delisting' || cls.category === 'maintenance');

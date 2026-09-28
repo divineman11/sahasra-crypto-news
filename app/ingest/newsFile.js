@@ -99,6 +99,7 @@ async function tick(prisma, scheduler, opts = {}) {
   const baseWhere = {
     publishedAt: { gte: since, lte: future },
     firstSeenAt: { gte: since },
+    kind: { not: 'politics' }, // Trump-section items are not coin news
     OR: [{ userLabel: null }, { userLabel: { not: 'dismiss' } }],
   };
 

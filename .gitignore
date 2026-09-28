@@ -35,3 +35,6 @@ app/ingest/cache/gnews_tiers.json
 
 # Runtime output
 **/news_live.json
+
+# editor/tool backups
+*.bak

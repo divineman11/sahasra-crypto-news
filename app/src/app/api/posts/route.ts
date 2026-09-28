@@ -23,6 +23,7 @@ export async function GET(req: Request) {
   // gnews volume) is filtered out in SQL rather than downloaded and hidden client-side, so toggling
   // it on doesn't burn through the feed's 3000-post in-memory cap on rows the user never sees.
   const hideLowTier4 = url.searchParams.get("hideLowTier4") === "1";
+  const kindParam = url.searchParams.get("kind");
 
   try {
     let cursorRow: { id: string; firstSeenAt: Date } | null = null;
@@ -37,6 +38,8 @@ export async function GET(req: Request) {
     }
 
     const windowWhere = { publishedAt: { gte: new Date(Date.now() - RANGE_MS[range]) } };
+    // the crypto feed never returns Trump-section rows; the Trump section asks for kind=politics
+    const kindWhere = kindParam === "politics" ? { kind: "politics" } : { kind: { not: "politics" } };
     const tierWhere = hideLowTier4
       ? { NOT: { AND: [{ sourceTier: 4 }, { importance: { lt: 30 } }] } }
       : null;
@@ -48,7 +51,7 @@ export async function GET(req: Request) {
     // missing cursor instead of returning it. An
     // explicit "strictly before the cursor's (firstSeenAt, id)" filter has no such failure mode: it
     // only depends on the cursor row's own timestamp/id, never on whether it still matches `where`.
-    const andClauses: object[] = [windowWhere];
+    const andClauses: object[] = [windowWhere, kindWhere];
     if (tierWhere) andClauses.push(tierWhere);
     if (cursorRow) {
       andClauses.push({

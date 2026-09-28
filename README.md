@@ -18,7 +18,7 @@ It collects crypto news from exchanges, publishers, Google News, Telegram wires,
 - **Live feed** of crypto news with age, source, coin tags, category (listing, delisting, hack, ETF, regulatory…), importance and sentiment.
 - **Coin pages** — `http://localhost:4180/coin/BTC` — last 48 h / 7 d of news for one coin, with tabs: News · Exchange · Official · Social · Media.
 - **Search** across all stories.
-- **Trump section** — a separate sidebar section with Trump's own Truth Social posts (every 2 min) and Trump market news (every 5 min: Google News, Reuters/AP, CNBC, White House actions and releases). It is kept completely separate: Trump items never appear in the crypto feed, its filters, or coin pages. Google News dates are checked against the real article page, because Google often re-dates old stories; stories whose date cannot be confirmed are marked `[date unverified]`.
+- **Trump section** — a separate sidebar section with Trump's own Truth Social posts (every 2 min) and Trump market news (Google News and Reuters/AP every 15 min; CNBC and White House actions and releases every 5 min). It is kept completely separate: Trump items never appear in the crypto feed, its filters, or coin pages. Google News dates are checked against the real article page, because Google often re-dates old stories; stories whose date cannot be confirmed are marked `[date unverified]`. Known failures and fixes: [docs/TRUMP.md](docs/TRUMP.md).
 - **Filters:** Hot, Rising, Important, Bullish, Bearish, Exchange, Saved, Trump, and a “hide low-importance” toggle.
 - **Sources (no API keys needed):**
   - Exchange announcements: Binance, Bybit, Bitget, KuCoin, Bithumb, Upbit, OKX, Coinbase, Hyperliquid (incl. new-market / delisting detection)

@@ -110,6 +110,7 @@ export async function GET(
 
     const now = Date.now();
     const baseWhere: Prisma.PostWhereInput = {
+      kind: { not: "politics" }, // Trump-section items never appear on coin pages
       instruments: { some: { ticker } },
       publishedAt: {
         gte: new Date(now - RANGE_MS[range]),

@@ -5,30 +5,63 @@
 // Google News pubDate is often a re-index date rather than the real publish
 // date, so we decode the real article URL and verify the article's own
 // published timestamp (falling back to a copies check) before trusting it.
+// Google requests are capped per run and per day (TRUMP_GNEWS_DAILY_BUDGET, default 2000); failures are remembered for 6 h. See docs/TRUMP.md for known failures and fixes.
 
 const { request } = require('../http');
 
-const MAX_ARTICLE_FETCHES = 12;
-const MAX_COPIES_CHECKS = 8;
+const MAX_ARTICLE_FETCHES = 6; // per Google feed per pass
+const MAX_COPIES_CHECKS = 4; // per Google feed per pass
+const TRUTH_FEED = 'https://trumpstruth.org/feed'; // public mirror of @realDonaldTrump; replace here if it goes away (see docs/TRUMP.md)
+
+// The three Google News feeds are polled every TRUMP_GNEWS_INTERVAL_MIN minutes (default 15);
+// CNBC and the White House feeds still run on every 5-minute pass.
+const GOOGLE_INTERVAL_MS = Math.max(5, parseInt(process.env.TRUMP_GNEWS_INTERVAL_MIN || "15", 10) || 15) * 60 * 1000;
+let lastGooglePass = 0;
+let lastTruthFallback = 0;
 
 const realUrlCache = new Map(); // gid -> { url, at }
 const articleDateCache = new Map(); // realUrl -> { result, at }
-const staleGids = new Set();
+const staleGids = new Map(); // gid -> time marked stale
+const emitted = new Map(); // gid or link -> time an item was returned (already in the database; skip for 3 h)
+const copiesCache = new Map(); // cleaned title -> true (stale) / false
 
-const CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
-
-function cacheGet(map, key) {
+const CACHE_TTL = 7 * 24 * 60 * 60 * 1000;      // positive results
+const NEG_TTL = 6 * 60 * 60 * 1000;              // failed lookups are retried after 6 h
+const CACHE_MAX = 5000;
+function cacheGet(map, key) {            // returns undefined when missing/expired; null is a cached "no result"
   const e = map.get(key);
   if (!e) return undefined;
-  if (Date.now() - e.at > CACHE_TTL) {
-    map.delete(key);
-    return undefined;
-  }
+  if (Date.now() - e.at > (e.v === null ? NEG_TTL : CACHE_TTL)) { map.delete(key); return undefined; }
   return e.v;
 }
-
 function cacheSet(map, key, v) {
   map.set(key, { v, at: Date.now() });
+  if (map.size > CACHE_MAX) {           // Map keeps insertion order: drop the oldest 1000
+    let n = 0;
+    for (const k of map.keys()) { map.delete(k); if (++n >= 1000) break; }
+  }
+}
+
+function markStale(gid) { if (!gid) return; cacheSet(staleGids, gid, true); }
+
+function wasEmitted(k) { const t = emitted.get(k); if (!t) return false; if (Date.now() - t > 3 * 3600e3) { emitted.delete(k); return false; } return true; }
+function markEmitted(k) { if (!k) return; emitted.set(k, Date.now()); if (emitted.size > CACHE_MAX) { let n = 0; for (const x of emitted.keys()) { emitted.delete(x); if (++n >= 1000) break; } } }
+
+const GOOGLE_DAILY_BUDGET = Math.max(50, parseInt(process.env.TRUMP_GNEWS_DAILY_BUDGET || '2000', 10) || 2000);
+let googleDay = ''; let googleUsed = 0; let budgetLogged = '';
+function googleAllowed() {
+  const d = new Date().toISOString().slice(0, 10);
+  if (d !== googleDay) { googleDay = d; googleUsed = 0; }
+  if (googleUsed >= GOOGLE_DAILY_BUDGET) {
+    if (budgetLogged !== d) { budgetLogged = d; console.error('[trump] daily Google request budget reached (' + GOOGLE_DAILY_BUDGET + '); Google sources paused until 00:00 UTC. Raise TRUMP_GNEWS_DAILY_BUDGET to change.'); }
+    return false;
+  }
+  return true;
+}
+async function googleRequest(url, opts) {   // every request to news.google.com goes through here
+  if (!googleAllowed()) throw new Error('google budget exhausted');
+  googleUsed += 1;
+  return request(url, opts);
 }
 
 function parseRssItems(xml) {
@@ -210,21 +243,22 @@ function gidFromLink(link) {
 
 async function decodeGoogleLink(link) {
   const gid = gidFromLink(link);
-  if (!gid) return null;
-  if (staleGids.has(gid)) return { stale: true, url: null };
-  const cached = cacheGet(realUrlCache, gid);
-  if (cached) return { stale: false, url: cached };
+  if (!gid) return { stale: false, url: null };
+  if (cacheGet(staleGids, gid) === true) return { stale: true, url: null };
+  const cached = cacheGet(realUrlCache, gid); if (cached !== undefined) return { stale: false, url: cached };
 
   let html;
   try {
-    const r = await request('https://news.google.com/rss/articles/' + encodeURIComponent(gid), { timeoutMs: 8000 });
+    const r = await googleRequest('https://news.google.com/rss/articles/' + encodeURIComponent(gid), { timeoutMs: 8000 });
     html = r.text || '';
   } catch (e) {
+    if (e && e.message === 'google budget exhausted') return { stale: false, url: null, budget: true };
+    cacheSet(realUrlCache, gid, null);
     return { stale: false, url: null };
   }
   const sg = (html.match(/data-n-a-sg="([^"]+)"/) || [])[1];
   const ts = (html.match(/data-n-a-ts="([^"]+)"/) || [])[1];
-  if (!sg || !ts) return { stale: false, url: null };
+  if (!sg || !ts) { cacheSet(realUrlCache, gid, null); return { stale: false, url: null }; }
 
   try {
     const inner = JSON.stringify([
@@ -235,30 +269,47 @@ async function decodeGoogleLink(link) {
       sg,
     ]);
     const freq = encodeURIComponent(JSON.stringify([[['Fbv4je', inner, null, 'generic']]]));
-    const r = await request('https://news.google.com/_/DotsSplashUi/data/batchexecute', {
+    const r = await googleRequest('https://news.google.com/_/DotsSplashUi/data/batchexecute', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
       body: 'f.req=' + freq,
       timeoutMs: 10000,
     });
     const realUrl = decodeBatchResponse(r.text);
-    if (!realUrl) return { stale: false, url: null };
+    if (!realUrl) { cacheSet(realUrlCache, gid, null); return { stale: false, url: null }; }
     cacheSet(realUrlCache, gid, realUrl);
     return { stale: false, url: realUrl };
   } catch (e) {
+    if (e && e.message === 'google budget exhausted') return { stale: false, url: null, budget: true };
+    cacheSet(realUrlCache, gid, null);
     return { stale: false, url: null };
   }
 }
 
 async function fetchArticleDate(realUrl) {
   const cached = cacheGet(articleDateCache, realUrl);
-  if (cached) return cached;
+  if (cached !== undefined) return cached;
   let result = null;
   try {
     const r = await request(realUrl, { timeoutMs: 8000 });
-    const text = r.text || '';
-    if (text.length <= 2 * 1024 * 1024) {
-      result = extractArticleDate(text, new Date());
+    if (r.headers) {
+      const len = r.headers && typeof r.headers.get === 'function' ? r.headers.get('content-length') : null;
+      if (len && Number(len) > 2 * 1024 * 1024) result = null;
+      else {
+        const ct = r.headers && typeof r.headers.get === 'function' ? r.headers.get('content-type') : null;
+        if (ct && !String(ct).includes('html')) result = null;
+        else {
+          const text = r.text || '';
+          if (text.length <= 2 * 1024 * 1024) {
+            result = extractArticleDate(text, new Date());
+          }
+        }
+      }
+    } else {
+      const text = r.text || '';
+      if (text.length <= 2 * 1024 * 1024) {
+        result = extractArticleDate(text, new Date());
+      }
     }
   } catch (e) {
     result = null;
@@ -280,20 +331,23 @@ function ageMs(date, now) {
 }
 
 async function copiesCheck(cleanT, now) {
+  const c = cacheGet(copiesCache, cleanT); if (c !== undefined) return c;
   try {
     const url = 'https://news.google.com/rss/search?q=' +
       encodeURIComponent('"' + cleanT + '"') + '&hl=en-US&gl=US&ceid=US:en';
-    const r = await request(url, { timeoutMs: 10000 });
+    const r = await googleRequest(url, { timeoutMs: 10000 });
     const items = parseRssItems(r.text);
     const norm = normalizeTitleForCompare(cleanT);
     for (const it of items) {
       const itClean = cleanTitle(it.title);
       if (normalizeTitleForCompare(itClean) !== norm) continue;
       const d = it.pubDate ? new Date(it.pubDate) : null;
-      if (d && !isNaN(d) && ageMs(d, now) > 2 * 60 * 60 * 1000) return true;
+      if (d && !isNaN(d) && ageMs(d, now) > 2 * 60 * 60 * 1000) { cacheSet(copiesCache, cleanT, true); return true; }
     }
+    cacheSet(copiesCache, cleanT, false);
     return false;
   } catch (e) {
+    if (e && e.message === 'google budget exhausted') throw e;
     return false;
   }
 }
@@ -314,76 +368,46 @@ async function processGoogleItems(entries, sourceName, maxAgeMs) {
     if (!passesNoiseFilter({ title: ct, description: e.description, publisher: publisher })) continue;
     const gd = e.pubDate ? new Date(e.pubDate) : null;
     if (!gd || isNaN(gd)) continue;
+    if (gd.getTime() - now > 10 * 60e3) continue;
     if (now - gd.getTime() > maxAgeMs) continue;
     candidates.push({ raw: e, title: ct, publisher: publisher, googleDate: gd });
   }
 
   candidates.sort((a, b) => b.googleDate - a.googleDate);
-
-  let fetches = 0;
-  let copies = 0;
-
+  let fetches = 0, copies = 0;
   for (const c of candidates) {
     if (out.length >= 25) break;
     const key = dedupeKey(c.title);
     if (seen.has(key)) continue;
-
     const gid = gidFromLink(c.raw.link);
-    if (gid && staleGids.has(gid)) continue;
-
-    let realUrl = null;
-    if (fetches < MAX_ARTICLE_FETCHES) {
-      fetches++;
-      const dec = await decodeGoogleLink(c.raw.link);
-      realUrl = dec.url;
-    }
-
-    let publishedAt = null;
-    let verified = false;
-    let dateUnknown = false;
-
-    if (realUrl && fetches <= MAX_ARTICLE_FETCHES + 1 && (fetches - 1) <= MAX_ARTICLE_FETCHES) {
+    const emitKey = gid || c.raw.link;
+    if (wasEmitted(emitKey)) { seen.add(key); continue; }          // already returned (and stored) recently
+    if (gid && cacheGet(staleGids, gid) === true) continue;
+    if (!googleAllowed()) break;                                     // out of daily budget: retry tomorrow
+    if (fetches >= MAX_ARTICLE_FETCHES) continue;                    // per-run budget: retry next run
+    if (cacheGet(realUrlCache, gid) === undefined) fetches++;
+    const dec = await decodeGoogleLink(c.raw.link);
+    if (dec.budget) break;
+    const realUrl = dec.url;
+    let result = null;                                               // Date, or null = unknown
+    if (realUrl) {
       const d = await fetchArticleDate(realUrl);
-      if (d) {
-        const age = now - d.getTime();
-        if (/^\d{4}-\d{2}-\d{2}$/.test(d.toISOString ? '' : '')) { /* noop */ }
-        if (d.toISOString().slice(0, 10) === new Date(now).toISOString().slice(0, 10) && isDateOnlyValue(d)) {
-          dateUnknown = true;
-        } else if (age > 2 * 60 * 60 * 1000) {
-          if (gid) staleGids.add(gid);
-          continue;
-        } else {
-          publishedAt = d;
-          verified = true;
-        }
-      }
+      if (d && !(isDateOnlyValue(d) && d.toISOString().slice(0, 10) === new Date(now).toISOString().slice(0, 10))) result = d;
     }
-
-    if (!verified && !dateUnknown) {
-      if (fetches <= MAX_ARTICLE_FETCHES && copies < MAX_COPIES_CHECKS) {
-        copies++;
-        const stale = await copiesCheck(c.title, now);
-        if (stale) {
-          if (gid) staleGids.add(gid);
-          continue;
-        }
-        seen.add(key);
-        out.push(makeItem(sourceName, 2, c.title + ' — ' + c.publisher + ' [date unverified]',
-          realUrl || c.raw.link, c.googleDate));
-      } else {
-        // Out of budget: skip this run, retry next run.
-        continue;
-      }
-    } else if (dateUnknown) {
-      seen.add(key);
-      out.push(makeItem(sourceName, 2, c.title + ' — ' + c.publisher + ' [date unverified]',
-        realUrl || c.raw.link, c.googleDate));
-    } else {
-      seen.add(key);
-      out.push(makeItem(sourceName, 2, c.title + ' — ' + c.publisher, realUrl || c.raw.link, publishedAt));
+    if (result) {
+      if (now - result.getTime() > 2 * 3600e3) { markStale(gid); continue; }
+      seen.add(key); markEmitted(emitKey);
+      out.push(makeItem(sourceName, 2, c.title + ' — ' + c.publisher, realUrl, result));
+      continue;
     }
+    if (copies >= MAX_COPIES_CHECKS) continue;
+    copies++;
+    let stale;
+    try { stale = await copiesCheck(c.title, now); } catch (e) { break; }   // budget exhausted
+    if (stale) { markStale(gid); continue; }
+    seen.add(key); markEmitted(emitKey);
+    out.push(makeItem(sourceName, 2, c.title + ' — ' + c.publisher + ' [date unverified]', realUrl || c.raw.link, c.googleDate));
   }
-
   out.sort((a, b) => b.publishedAt - a.publishedAt);
   return out.slice(0, 25);
 }
@@ -410,13 +434,17 @@ function makeItem(sourceName, sourceTier, title, url, publishedAt) {
 async function runTruth() {
   let res;
   try {
-    res = await request('https://trumpstruth.org/feed', { timeoutMs: 20000 });
+    res = await request(TRUTH_FEED, { timeoutMs: 20000 });
   } catch (e) {
     console.error('[trump] trump:truth failed:', e.message);
-    return googleTruthFallback();
+    if (Date.now() - lastTruthFallback >= GOOGLE_INTERVAL_MS) { lastTruthFallback = Date.now(); return googleTruthFallback(); }
+    return [];
   }
   const items = parseRssItems(res.text);
-  if (!items.length) return googleTruthFallback();
+  if (!items.length) {
+    if (Date.now() - lastTruthFallback >= GOOGLE_INTERVAL_MS) { lastTruthFallback = Date.now(); return googleTruthFallback(); }
+    return [];
+  }
 
   const now = Date.now();
   const out = [];
@@ -439,14 +467,18 @@ async function runTruth() {
     out.push(makeItem('trump:truth', 1, title, url, d));
   }
   out.sort((a, b) => b.publishedAt - a.publishedAt);
-  if (!out.length) return googleTruthFallback();
+  if (!out.length) {
+    if (Date.now() - lastTruthFallback >= GOOGLE_INTERVAL_MS) { lastTruthFallback = Date.now(); return googleTruthFallback(); }
+    return [];
+  }
   return out.slice(0, 20);
 }
 
 async function googleTruthFallback() {
   const url = 'https://news.google.com/rss/search?q=%22Truth+Social%22+Trump+when:2h&hl=en-US&gl=US&ceid=US:en';
+  if (!googleAllowed()) return [];
   try {
-    const r = await request(url, { timeoutMs: 15000 });
+    const r = await googleRequest(url, { timeoutMs: 15000 });
     const entries = parseRssItems(r.text);
     const items = await processGoogleItems(entries, 'trump:truth-fallback', 2 * 60 * 60 * 1000);
     return items.slice(0, 20);
@@ -468,9 +500,13 @@ async function runNews() {
 
   const collected = [];
 
+  const googlePass = Date.now() - lastGooglePass >= GOOGLE_INTERVAL_MS;
+  if (googlePass) lastGooglePass = Date.now();
+
   for (const job of jobs) {
     try {
-      const r = await request(job.url, { timeoutMs: 15000 });
+      if (job.google === true && (!googlePass || !googleAllowed())) continue;
+      const r = await (job.google === true ? googleRequest(job.url, { timeoutMs: 15000 }) : request(job.url, { timeoutMs: 15000 }));
       const entries = parseRssItems(r.text);
       const now = Date.now();
 

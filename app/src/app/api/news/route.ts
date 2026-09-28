@@ -21,6 +21,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
   try {
     const where = {
+      kind: { not: "politics" }, // Trump-section items are not coin news
       instruments: { some: { ticker } },
       publishedAt: { gte: new Date(Date.now() - sinceMs) },
       importance: { gte: minImportance },

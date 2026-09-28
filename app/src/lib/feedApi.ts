@@ -36,6 +36,13 @@ export async function fetchLatest(): Promise<void> {
     if (useFeedStore.getState().nextCursor === undefined) {
       useFeedStore.getState().setNextCursor(payload?.nextCursor ?? null);
     }
+    // The Trump section has its own feed (kind=politics); the crypto request above never includes it.
+    const tr = await fetch(`/api/posts?limit=50&kind=politics`, { cache: "no-store" });
+    if (tr.ok) {
+      const td = (await tr.json()) as { posts?: unknown[] } | null;
+      const tposts = Array.isArray(td?.posts) ? (td!.posts as unknown[]).filter(isPostDTO) : [];
+      if (tposts.length > 0) useFeedStore.getState().hydrate(tposts);
+    }
   } catch (err) {
     console.warn("fetchLatest error", err);
   }
