@@ -27,3 +27,5 @@ The ingest worker polls real news and market sources:
 | Hyperliquid | New-market detection | 10 s |
 | Crypto RSS | 7 crypto RSS feeds | 90 s |
 | SEC | Press releases (only when `SEC_USER_AGENT` is set) | — |
+| Trump — Truth Social | Trump's own posts (via the trumpstruth.org mirror; Google News fallback). Shown only in the separate Trump section | 2 min |
+| Trump — market news | Google News (market-keyword, Reuters/AP and broad queries, real publish date verified against the article), CNBC, White House actions & releases. Shown only in the Trump section | 5 min |

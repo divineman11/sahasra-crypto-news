@@ -12,6 +12,7 @@ import {
   Plus,
   AlertCircle,
   Bookmark,
+  Flag,
 } from "lucide-react";
 import { useFeedStore } from "@/store/useFeedStore";
 import { visibleStories } from "@/lib/filters";
@@ -27,6 +28,7 @@ const FILTERS: { key: FilterKey; label: string; icon: typeof LayoutList }[] = [
   { key: "bullish", label: "Bullish", icon: ArrowUpRight },
   { key: "bearish", label: "Bearish", icon: ArrowDownRight },
   { key: "saved", label: "Saved", icon: Bookmark },
+  { key: "trump", label: "Trump", icon: Flag },
 ];
 
 export function LeftSidebar() {

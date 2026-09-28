@@ -32,6 +32,7 @@ const official = require('./ingest/adapters/official');
 const youtube = require('./ingest/adapters/youtube');
 const reddit = require('./ingest/adapters/reddit');
 const bluesky = require('./ingest/adapters/bluesky');
+const trump = require('./ingest/adapters/trump');
 const { loadWatchBases } = require('./ingest/watchlist');
 
 const TIER_CACHE_FILE = path.join(__dirname, 'ingest', 'cache', 'gnews_tiers.json');
@@ -143,6 +144,7 @@ async function main() {
     // whether we even try.
     ...(process.env.REDDIT_ENABLED !== '0' ? reddit.make() : []),
     ...bluesky.make(),
+    ...trump.make(), // Trump posts + Trump market news (kind "politics"); shown only in the separate Trump section; disable with TRUMP_ENABLED=0
   ];
 
   let futuresFirstRun = true;

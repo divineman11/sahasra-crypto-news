@@ -1,5 +1,6 @@
 import {
   Building2,
+  Flag,
   Landmark,
   MessageCircle,
   Newspaper,
@@ -41,6 +42,8 @@ export function kindIcon(kind: Kind): { Icon: LucideIcon; cls: string; label: st
       return { Icon: PenLine, cls: "text-amber-400", label: kind === "official" ? "OFFICIAL" : "BLOG" };
     case "social":
       return { Icon: MessageCircle, cls: "text-violet-400", label: "SOCIAL" };
+    case "politics":
+      return { Icon: Flag, cls: "text-orange-400", label: "TRUMP" };
     case "news":
     default:
       return { Icon: Newspaper, cls: "text-sky-400", label: "NEWS" };

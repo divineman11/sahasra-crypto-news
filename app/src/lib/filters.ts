@@ -97,6 +97,9 @@ export function matchesStory(
       return isImportantStory(v);
     case "saved":
       return isSavedStory(v, savedIds);
+    // The Trump section: visibleStories() has already narrowed the posts to kind "politics".
+    case "trump":
+      return true;
     default:
       return true;
   }
@@ -113,15 +116,19 @@ export function visibleStories(
   hideLowGnews = false,
   savedIds: Iterable<string> = []
 ): StoryView[] {
+  // Trump news (kind "politics") lives only in the separate Trump section, never in the crypto
+  // feed filters, and the Trump section shows nothing else.
+  const trumpOnly = f === "trump";
+  const scoped = posts.filter((p) => (trumpOnly ? p.kind === "politics" : p.kind !== "politics"));
   // F4 review: "Saved" is exempt from both the hide-low-tier-4 toggle and portfolio narrowing —
   // a bookmark is a deliberate per-item choice, so a low-importance tier-4 post or a coin outside
   // the portfolio the user explicitly starred should still show up under Saved. Every caller
   // (NewsFeed's row list and LeftSidebar's counts) goes through this one function, so the exemption
   // can't drift between the two.
   const exemptSaved = f === "saved";
-  const base = !exemptSaved && hideLowGnews ? posts.filter((p) => !hideLowImportanceTier4(p)) : posts;
+  const base = !exemptSaved && hideLowGnews ? scoped.filter((p) => !hideLowImportanceTier4(p)) : scoped;
   let views = groupStories(base).filter((v) => matchesStory(v, f, now, savedIds));
-  if (!exemptSaved && portfolio.length > 0) {
+  if (!exemptSaved && !trumpOnly && portfolio.length > 0) {
     const set = new Set(portfolio);
     views = views.filter((v) => v.members.some((m) => m.instruments.some((i) => set.has(i.ticker))));
   }

@@ -60,7 +60,8 @@ function tabWhere(tab: SourceTab): Prisma.PostWhereInput {
     case "news":
     default:
       return {
-        kind: { notIn: ["media", "social", "official", "blog", "exchange", "symbol"] },
+        // "politics" = Trump section items; they never show on coin pages.
+        kind: { notIn: ["media", "social", "official", "blog", "exchange", "symbol", "politics"] },
         NOT: { sourceName: { startsWith: "blog:" } },
       };
   }

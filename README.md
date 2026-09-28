@@ -18,7 +18,8 @@ It collects crypto news from exchanges, publishers, Google News, Telegram wires,
 - **Live feed** of crypto news with age, source, coin tags, category (listing, delisting, hack, ETF, regulatory…), importance and sentiment.
 - **Coin pages** — `http://localhost:4180/coin/BTC` — last 48 h / 7 d of news for one coin, with tabs: News · Exchange · Official · Social · Media.
 - **Search** across all stories.
-- **Filters:** Hot, Rising, Important, Bullish, Bearish, Exchange, Saved, and a “hide low-importance” toggle.
+- **Trump section** — a separate sidebar section with Trump's own Truth Social posts (every 2 min) and Trump market news (every 5 min: Google News, Reuters/AP, CNBC, White House actions and releases). It is kept completely separate: Trump items never appear in the crypto feed, its filters, or coin pages. Google News dates are checked against the real article page, because Google often re-dates old stories; stories whose date cannot be confirmed are marked `[date unverified]`.
+- **Filters:** Hot, Rising, Important, Bullish, Bearish, Exchange, Saved, Trump, and a “hide low-importance” toggle.
 - **Sources (no API keys needed):**
   - Exchange announcements: Binance, Bybit, Bitget, KuCoin, Bithumb, Upbit, OKX, Coinbase, Hyperliquid (incl. new-market / delisting detection)
   - ~48 crypto news sites and regulator feeds (RSS)
@@ -119,7 +120,7 @@ Everything is optional except `DATABASE_URL`. See `.env.example` for the full li
 | `GNEWS_DAILY_BUDGET` | Max Google News requests per day (default 5000) |
 | `SEC_USER_AGENT` | Enables the SEC press-release feed (SEC requires a contact e-mail in the User-Agent) |
 | `REDDIT_CLIENT_ID` / `_SECRET` / `_USERNAME` / `_PASSWORD` | Optional official Reddit API keys; without them Reddit is read via its public RSS feed |
-| `TG_WIRES_ENABLED`, `OFFICIAL_ENABLED`, `YOUTUBE_ENABLED`, `REDDIT_ENABLED`, `BLUESKY_ENABLED` | Set to `"0"` to turn a source group off |
+| `TG_WIRES_ENABLED`, `OFFICIAL_ENABLED`, `YOUTUBE_ENABLED`, `REDDIT_ENABLED`, `BLUESKY_ENABLED`, `TRUMP_ENABLED` | Set to `"0"` to turn a source group off |
 
 Ports: web **4180**, live-update WebSocket **4181** (both bound to `127.0.0.1` only).
 
