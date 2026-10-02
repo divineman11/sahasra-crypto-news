@@ -14,6 +14,8 @@ import {
   Bookmark,
   Flag,
 } from "lucide-react";
+import Link from "next/link";
+import { DeviMark } from "@/components/devi";
 import { useFeedStore } from "@/store/useFeedStore";
 import { visibleStories } from "@/lib/filters";
 import { fetchLatest } from "@/lib/feedApi";
@@ -87,6 +89,17 @@ export function LeftSidebar() {
             <span className="font-mono text-[10px] text-slate-500">{counts[key]}</span>
           </button>
         ))}
+        <Link
+          href="/about/devis"
+          title="About the ten lenses (the Devi marks on the Understand-this cards)"
+          className="flex items-center justify-between rounded px-2 py-1.5 text-left text-xs font-medium text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-slate-200"
+        >
+          <span className="flex items-center gap-2">
+            <DeviMark devi="tara" size={14} tooltip={false} />
+            Ten lenses
+          </span>
+          <span className="font-mono text-[10px] text-slate-500">10</span>
+        </Link>
       </nav>
 
       <p className="px-2 text-[10px] leading-snug text-slate-500">

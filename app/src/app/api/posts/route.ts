@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { serializePost } from "@/lib/serialize";
+import { withExplain } from "@/lib/explainServer";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -75,7 +76,7 @@ export async function GET(req: Request) {
     const nextCursor = hasMore && page.length > 0 ? page[page.length - 1].id : null;
 
     return NextResponse.json(
-      { posts: page.map(serializePost), nextCursor, range },
+      { posts: page.map((p) => withExplain(serializePost(p))), nextCursor, range },
       { headers: { "Cache-Control": "no-store" } }
     );
   } catch (err) {

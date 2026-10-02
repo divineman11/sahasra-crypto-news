@@ -38,4 +38,5 @@ export interface PostDTO {
   ret15m: number | null;
   moved5m: boolean | null;
   priceStatus: string;
+  explainEventId?: string | null; // set when an "Understand this" explain card exists for the post
 }

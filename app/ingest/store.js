@@ -8,6 +8,7 @@ const { detailTickers, makeBudget } = require('./details');
 const { serializePost } = require('../lib/serialize');
 const { hotUpsert } = require('./hotListUpsert');
 const { KEEP_DAYS } = require('./config');
+const explain = require('./explain/events');
 
 class Store {
   constructor({ prisma, redis, storyIndex, alerts = null }) {
@@ -288,7 +289,25 @@ class Store {
         }
       }
 
+      // big-news gate -> explain event (never blocks or breaks ingest)
+      let explainEventId = null;
+      try {
+        const names = {};
+        for (const t of tickers) names[t] = nameOf(t);
+        const ev = explain.consider({
+          id: post.id, title: raw.title, url: raw.url, sourceDomain: post.sourceDomain, sourceName: raw.sourceName,
+          sourceTier: raw.sourceTier, kind: raw.kind, category: cls.category, importance: cls.importance,
+          sentiment: cls.sentiment, exchange: raw.exchange || null, tickers, names, flags: cls.flags || null,
+          unlockPct: cls.unlockPct, unlockPctBasis: cls.unlockPctBasis, unlockAmount: cls.unlockAmount,
+          publishedAt: raw.publishedAt, storyId, userLabel: null,
+        });
+        if (ev && ev.state !== 'queued') explainEventId = ev.id;
+      } catch (e) {
+        console.error('[store] explain error:', e.message || e);
+      }
+
       const dto = serializePost(post);
+      if (explainEventId) dto.explainEventId = explainEventId;
       const json = JSON.stringify(dto);
       let published = false;
       try {

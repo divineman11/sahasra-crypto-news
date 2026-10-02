@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { serializePost } from "@/lib/serialize";
+import { withExplain } from "@/lib/explainServer";
 import { parseSince } from "@/lib/since";
 
 export const dynamic = "force-dynamic";
@@ -47,7 +48,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         count: posts.length,
         totalCount,
         importantCount,
-        items: posts.map(serializePost),
+        items: posts.map((p) => withExplain(serializePost(p))),
       },
       { headers: { "Cache-Control": "no-store", "Access-Control-Allow-Origin": "*" } }
     );

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { serializePost } from "@/lib/serialize";
+import { withExplain } from "@/lib/explainServer";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -25,7 +26,7 @@ export async function GET(
       return Response.json({ error: "post not found" }, { status: 404 });
     }
     return Response.json(
-      { post: serializePost(p) },
+      { post: withExplain(serializePost(p)) },
       { headers: { "Cache-Control": "no-store" } }
     );
   } catch {

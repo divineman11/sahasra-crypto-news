@@ -1,0 +1,195 @@
+{
+  "note": "Single source for the ten lenses: legend page, tooltips, tests. Original editorial symbols; see /about/devis.",
+  "devis": [
+    {
+      "n": 1,
+      "key": "tara",
+      "name": "Tara",
+      "iast": "Tārā",
+      "lens": "Understand this",
+      "meaning": "Guidance across difficult water.",
+      "tooltip": "Inspired by Tara's association with guidance across difficult water; a contemporary editorial interpretation.",
+      "component": "Tara",
+      "accentVar": "--devi-tara",
+      "accentVar2": "--devi-tara-2",
+      "emblem": "lotus over crossing waves",
+      "colours": {
+        "dark": "#2f6bff",
+        "light": "#1d4ed8",
+        "accentDark": "#c9d1e0",
+        "accentLight": "#8a96ad"
+      }
+    },
+    {
+      "n": 2,
+      "key": "kali",
+      "name": "Kali",
+      "iast": "Kālī",
+      "lens": "What changes?",
+      "meaning": "Time and transformation.",
+      "tooltip": "Inspired by Kali's association with time and transformation; a contemporary editorial interpretation.",
+      "component": "Kali",
+      "accentVar": "--devi-kali",
+      "accentVar2": "--devi-kali-2",
+      "emblem": "opening circular arc",
+      "colours": {
+        "dark": "#5b6ad0",
+        "light": "#2a3a8c",
+        "accentDark": "#c81e45",
+        "accentLight": "#c81e45"
+      }
+    },
+    {
+      "n": 3,
+      "key": "bhuvaneshwari",
+      "name": "Bhuvaneshwari",
+      "iast": "Bhuvaneśvarī",
+      "lens": "Wider context",
+      "meaning": "The whole field in which things happen.",
+      "tooltip": "Inspired by Bhuvaneshwari's association with the whole field in which things happen; a contemporary editorial interpretation.",
+      "component": "Bhuvaneshwari",
+      "accentVar": "--devi-bhuvaneshwari",
+      "accentVar2": "--devi-bhuvaneshwari-2",
+      "emblem": "nested horizons",
+      "colours": {
+        "dark": "#ffb000",
+        "light": "#b07400",
+        "accentDark": "#9d4dff",
+        "accentLight": "#9d4dff"
+      }
+    },
+    {
+      "n": 4,
+      "key": "tripurasundari",
+      "name": "Tripura Sundari",
+      "iast": "Tripurasundarī",
+      "lens": "Putting it together",
+      "meaning": "The beauty of a complete, balanced picture.",
+      "tooltip": "Inspired by Tripura Sundari's association with the beauty of a complete, balanced picture; a contemporary editorial interpretation.",
+      "component": "TripuraSundari",
+      "accentVar": "--devi-tripurasundari",
+      "accentVar2": "--devi-tripurasundari-2",
+      "emblem": "three balanced petal clusters",
+      "colours": {
+        "dark": "#ff4d6d",
+        "light": "#be123c",
+        "accentDark": "#e0b84a",
+        "accentLight": "#e0b84a"
+      }
+    },
+    {
+      "n": 5,
+      "key": "chhinnamasta",
+      "name": "Chhinnamasta",
+      "iast": "Chinnamastā",
+      "lens": "Trade-offs",
+      "meaning": "Energy given so that others are nourished.",
+      "tooltip": "Inspired by Chhinnamasta's association with energy given so that others are nourished; a contemporary editorial interpretation.",
+      "component": "Chhinnamasta",
+      "accentVar": "--devi-chhinnamasta",
+      "accentVar2": "--devi-chhinnamasta-2",
+      "emblem": "three flowing ribbons",
+      "colours": {
+        "dark": "#ff7a59",
+        "light": "#c2410c",
+        "accentDark": "#f3efe4",
+        "accentLight": "#9a8f78"
+      }
+    },
+    {
+      "n": 6,
+      "key": "kamala",
+      "name": "Kamala",
+      "iast": "Kamalā",
+      "lens": "Who is affected?",
+      "meaning": "Flourishing and plenty.",
+      "tooltip": "Inspired by Kamala's association with flourishing and plenty; a contemporary editorial interpretation.",
+      "component": "Kamala",
+      "accentVar": "--devi-kamala",
+      "accentVar2": "--devi-kamala-2",
+      "emblem": "unfolding lotus",
+      "colours": {
+        "dark": "#ff8fc2",
+        "light": "#be3d7f",
+        "accentDark": "#ffb000",
+        "accentLight": "#ffb000"
+      }
+    },
+    {
+      "n": 7,
+      "key": "bhairavi",
+      "name": "Bhairavi",
+      "iast": "Bhairavī",
+      "lens": "What deserves attention?",
+      "meaning": "Fierce, steady attention.",
+      "tooltip": "Inspired by Bhairavi's association with fierce, steady attention; a contemporary editorial interpretation.",
+      "component": "Bhairavi",
+      "accentVar": "--devi-bhairavi",
+      "accentVar2": "--devi-bhairavi-2",
+      "emblem": "steady flame in a triangle",
+      "colours": {
+        "dark": "#ff3860",
+        "light": "#c21e3e",
+        "accentDark": "#c67a3c",
+        "accentLight": "#c67a3c"
+      }
+    },
+    {
+      "n": 8,
+      "key": "bagalamukhi",
+      "name": "Bagalamukhi",
+      "iast": "Bagalāmukhī",
+      "lens": "Pauses and restrictions",
+      "meaning": "Stillness and restraint.",
+      "tooltip": "Inspired by Bagalamukhi's association with stillness and restraint; a contemporary editorial interpretation.",
+      "component": "Bagalamukhi",
+      "accentVar": "--devi-bagalamukhi",
+      "accentVar2": "--devi-bagalamukhi-2",
+      "emblem": "waves settling into a line",
+      "colours": {
+        "dark": "#ffd21f",
+        "light": "#a88600",
+        "accentDark": "#b9892b",
+        "accentLight": "#b9892b"
+      }
+    },
+    {
+      "n": 9,
+      "key": "dhumavati",
+      "name": "Dhumavati",
+      "iast": "Dhūmāvatī",
+      "lens": "What remains uncertain?",
+      "meaning": "Endurance when things are unclear.",
+      "tooltip": "Inspired by Dhumavati's association with endurance through uncertainty; a contemporary editorial interpretation.",
+      "component": "Dhumavati",
+      "accentVar": "--devi-dhumavati",
+      "accentVar2": "--devi-dhumavati-2",
+      "emblem": "open ring with smoke curves",
+      "colours": {
+        "dark": "#8e99ab",
+        "light": "#55606f",
+        "accentDark": "#e6e9ef",
+        "accentLight": "#8a93a3"
+      }
+    },
+    {
+      "n": 10,
+      "key": "matangi",
+      "name": "Matangi",
+      "iast": "Mātaṅgī",
+      "lens": "Terms and voices",
+      "meaning": "The spoken word and learning.",
+      "tooltip": "Inspired by Matangi's association with the spoken word and learning; a contemporary editorial interpretation.",
+      "component": "Matangi",
+      "accentVar": "--devi-matangi",
+      "accentVar2": "--devi-matangi-2",
+      "emblem": "abstract veena strings",
+      "colours": {
+        "dark": "#19c37d",
+        "light": "#0f8a58",
+        "accentDark": "#14b8a6",
+        "accentLight": "#14b8a6"
+      }
+    }
+  ]
+}

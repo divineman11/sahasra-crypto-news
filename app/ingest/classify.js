@@ -50,6 +50,12 @@ const COMPANY_LISTING_PHRASES = [
   /\blisting (on|at) (the )?(nasdaq|nyse|tsx|asx|lse)\b/gi,
 ];
 
+// flags consumed by the explain-card gate (not categories). Added to the result only when true.
+const DEPEG_RE = /\b(depeg(s|ged)?|loses? (its )?peg|lost (its )?peg|below \$?0\.9\d)/i;
+const FREEZE_RE = /\b(freez(e|es|ing)|halt(s|ed|ing)? (trading|withdrawals|deposits)|paus(e|es|ed|ing) (all )?(withdrawals|deposits|trading))\b/i;
+// a freeze/halt headline with hack-like context is a security event, not routine maintenance.
+const HACKCTX_RE = /\b(suspicious|outflows?|exploit(ed|s)?|drained|stolen|hack(ed|ers?)?|breach(ed)?|compromised|attacker)\b/i;
+
 const NEG_RE = /\b(not|no|never|refuses? to|refused to|declines? to|declined to|won't|will not|fails? to|failed to|yet to|has not|hasn't|have not|haven't|denies|denied)\b/i;
 
 const ALPHA_LISTING_RE = /doesn'?t mean official listing|not an official listing|alpha listing/i;
@@ -120,7 +126,7 @@ function detectCategory(raw) {
 }
 
 // Token amount ("1.66B", "1.655 billion", "113M tokens", "1,655,000,000 tokens") and % of supply
-// ("16.3% of total supply", "48% of circulating", "5% of tokens enter circulation", "1.5% supply").
+// ("12.5% of total supply", "48% of circulating", "5% of tokens enter circulation", "1.5% supply").
 const UNLOCK_AMOUNT_RE = /(?<![$\d.,])(\d[\d,]*(?:\.\d+)?)\s*(billion|million|thousand|bn|b|m|k)\b(?!\s*(?:usd|dollars?|worth))/i;
 const UNLOCK_AMOUNT_PLAIN_RE = /(?<![$\d.,])(\d{1,3}(?:,\d{3})+|\d{7,})\s*(?:[A-Za-z0-9]{2,10}\s+)?tokens?\b/i;
 const UNLOCK_PCT_RE = /(\d+(?:\.\d+)?)\s*%\s*(?:of\s+(?:the\s+)?)?((?:(?:total|circulating|current|max(?:imum)?|token)\s+)*)(?:supply|circulation|circulating|tokens?)\b/i;
@@ -184,6 +190,8 @@ function classify(raw, tickers) {
   if (ALPHA_LISTING_RE.test(title) && (category === 'listing' || category === 'other' || category == null)) {
     return withCap(raw, { category: 'other', importance: 30, sentiment: 'neutral' });
   }
+
+  if ((category === 'maintenance' || category === 'other') && FREEZE_RE.test(title) && HACKCTX_RE.test(title)) category = 'hack';
 
   let isPromo = false;
   if (kind === 'exchange' && PROMO_RE.test(title) && !PROMO_EXCEPTION_RE.test(title)) {
@@ -276,7 +284,10 @@ function classify(raw, tickers) {
     out.unlockPct = unlockInfo.pct;
     out.unlockPctBasis = unlockInfo.basis;
   }
+  const depeg = DEPEG_RE.test(title);
+  const freeze = FREEZE_RE.test(title);
+  if (depeg || freeze) out.flags = { depeg, freeze };
   return withCap(raw, out);
 }
 
-module.exports = { classify };
+module.exports = { classify, parseUnlock, NEG_RE };

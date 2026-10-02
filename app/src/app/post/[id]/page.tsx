@@ -83,7 +83,7 @@ export default function PostPage() {
               back to feed
             </Link>
           </div>
-        ) : fetching ? (
+        ) : fetching && !post ? (
           <div className="p-4 font-mono text-xs text-slate-500">loading article…</div>
         ) : post ? (
           <PostDetail post={post} />

@@ -138,6 +138,17 @@ The collector also writes `app/news_live.json` every 15 s — a JSON summary of 
 
 ---
 
+## "Understand this" cards
+
+When a story passes a big-news gate (a large token unlock, a hack or stablecoin depeg from a trusted source, a halt, a listing or delisting on a major exchange, or a major regulatory / ETF headline) the collector builds one explain card: what happened, why it matters, three scenarios with the condition and evidence for each, trade-offs, who is affected, what to watch, what remains uncertain, an evidence meter and a timeline. Text comes from fixed templates and only uses numbers found in the story. Cards show up as an "Understand this" chip in the feed, on the post page and in the sidebar's "Big news" list.
+
+- Each section carries one of ten small original line-art marks; see [docs/DEVIS.md](docs/DEVIS.md) and the in-app page `/about/devis`.
+- A forward log records how each coin moved against BTC after 1 / 7 / 30 days. "Historically X of N" is shown only once at least 20 comparable cases exist; until then the card says "Not enough comparable cases". The log starts empty.
+- Optional: set `EXPLAIN_REWRITE_CMD` to an external command that rewrites a card in plainer words; every rewrite is checked so it cannot add numbers, coins or advice. Empty = templates only. `EXPLAIN_ENABLED=0` turns the feature off.
+- Cards explain the news. They are not advice.
+
+---
+
 ## Troubleshooting
 
 | Problem | Fix |

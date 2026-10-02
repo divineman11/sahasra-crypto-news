@@ -8,6 +8,8 @@ import { useLabel } from "@/hooks/useLabel";
 import { ageMs, fmtAge, isFresh, isSavedStory, type StoryView } from "@/lib/filters";
 import { CATEGORY_STYLE, SENTIMENT_CHIP, fmtDateTime, fmtRet, kindIcon } from "@/lib/ui";
 import { faviconUrl } from "@/lib/faviconUrl";
+import { DeviMark } from "@/components/devi";
+import { ExplainLoader } from "@/components/explain/ExplainLoader";
 
 // Shared between the row grid and NewsFeed's header row so the two can never drift apart. Columns:
 // expand chevron, age, title (gets the rest — the wider-headline requirement), source, tags, mark.
@@ -45,6 +47,7 @@ function FeedRowImpl({ story, now, savedSet }: { story: StoryView; now: number; 
   const fresh = isFresh(post, now);
   const favicon = faviconUrl(post.sourceDomain);
   const detailId = `feedrow-detail-${post.id}`;
+  const explainId = story.members.find((m) => m.explainEventId)?.explainEventId ?? post.explainEventId ?? null;
 
   let rowCls = `grid ${FEED_GRID_COLS} items-center gap-2 h-7 text-xs px-2 border-b border-slate-800/60 hover:bg-slate-800/60 ${ROW_CSS_VARS}`;
   if (flash) rowCls += " row-flash";
@@ -88,6 +91,18 @@ function FeedRowImpl({ story, now, savedSet }: { story: StoryView; now: number; 
           >
             {post.title}
           </Link>
+          {explainId ? (
+            <button
+              type="button"
+              className="explain-chip"
+              title="Understand this: a plain-words explanation"
+              aria-label="Understand this"
+              onClick={() => { if (!expanded) toggleExpanded(post.id); }}
+            >
+              <DeviMark devi="tara" size={16} tooltip={false} />
+              <span className="hidden lg:inline">Understand this</span>
+            </button>
+          ) : null}
           {inlineTickers.map((t) => (
             <Link
               key={t.ticker}
@@ -189,17 +204,22 @@ function FeedRowImpl({ story, now, savedSet }: { story: StoryView; now: number; 
         </div>
       </div>
 
-      {expanded ? <FeedRowDetail id={detailId} story={story} /> : null}
+      {expanded ? <FeedRowDetail id={detailId} story={story} explainId={explainId} /> : null}
     </div>
   );
 }
 
-function FeedRowDetail({ id, story }: { id: string; story: StoryView }) {
+function FeedRowDetail({ id, story, explainId }: { id: string; story: StoryView; explainId: string | null }) {
   const { post, members } = story;
   const hasReaction = post.ret1m != null || post.ret5m != null || post.ret15m != null;
 
   return (
     <div id={id} className="border-b border-slate-800/60 bg-slate-900/40 px-3 py-2.5 text-[11px] text-slate-300">
+      {explainId ? (
+        <div className="mb-2">
+          <ExplainLoader id={explainId} />
+        </div>
+      ) : null}
       <p className="text-slate-200">{post.title}</p>
 
       {/* V2 review: a strict 2-column (label | value) definition list, one pair per row — the

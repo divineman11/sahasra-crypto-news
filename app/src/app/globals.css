@@ -190,3 +190,323 @@ a:hover {
     animation: none;
   }
 }
+
+/* ───────────────────────── "Understand this" explain cards + Devi marks ─────────────────────────
+   Original editorial line-art (spec section 2). Colours per Devi, dark neon default; light overrides below.
+   Neon stays on borders only; text is crisp. Marks are decorative (aria-hidden); static frame = resolved state. */
+:root {
+  --devi-tara: #2f6bff;
+  --devi-tara-2: #c9d1e0;
+  --devi-kali: #5b6ad0;
+  --devi-kali-2: #c81e45;
+  --devi-bhuvaneshwari: #ffb000;
+  --devi-bhuvaneshwari-2: #9d4dff;
+  --devi-tripurasundari: #ff4d6d;
+  --devi-tripurasundari-2: #e0b84a;
+  --devi-chhinnamasta: #ff7a59;
+  --devi-chhinnamasta-2: #f3efe4;
+  --devi-kamala: #ff8fc2;
+  --devi-kamala-2: #ffb000;
+  --devi-bhairavi: #ff3860;
+  --devi-bhairavi-2: #c67a3c;
+  --devi-bagalamukhi: #ffd21f;
+  --devi-bagalamukhi-2: #b9892b;
+  --devi-dhumavati: #8e99ab;
+  --devi-dhumavati-2: #e6e9ef;
+  --devi-matangi: #19c37d;
+  --devi-matangi-2: #14b8a6;
+  --ex-bg: #0a0d1c;
+  --ex-fg: #e6ebf5;
+  --ex-muted: #9aa6bd;
+  --ex-border: rgba(0, 240, 255, 0.4);
+  --ex-rule: rgba(0, 240, 255, 0.16);
+  --ex-glow: rgba(0, 240, 255, 0.18);
+  --ex-dot-on: #00f0ff;
+  --ex-dot-off: rgba(154, 166, 189, 0.35);
+  --ex-link: #7dd3fc;
+  --ex-red: #ff3860;
+  --ex-amber: #ffb000;
+  --ex-violet: #b78bff;
+  --ex-lime: #39ff14;
+  --ex-cyan: #00f0ff;
+  --ex-mark-glow: drop-shadow(0 0 1px rgba(0, 240, 255, 0.55));
+}
+[data-theme="light"] {
+  --devi-tara: #1d4ed8;
+  --devi-tara-2: #8a96ad;
+  --devi-kali: #2a3a8c;
+  --devi-kali-2: #c81e45;
+  --devi-bhuvaneshwari: #b07400;
+  --devi-bhuvaneshwari-2: #9d4dff;
+  --devi-tripurasundari: #be123c;
+  --devi-tripurasundari-2: #e0b84a;
+  --devi-chhinnamasta: #c2410c;
+  --devi-chhinnamasta-2: #9a8f78;
+  --devi-kamala: #be3d7f;
+  --devi-kamala-2: #ffb000;
+  --devi-bhairavi: #c21e3e;
+  --devi-bhairavi-2: #c67a3c;
+  --devi-bagalamukhi: #a88600;
+  --devi-bagalamukhi-2: #b9892b;
+  --devi-dhumavati: #55606f;
+  --devi-dhumavati-2: #8a93a3;
+  --devi-matangi: #0f8a58;
+  --devi-matangi-2: #14b8a6;
+  --ex-bg: #fbfcff;
+  --ex-fg: #0f172a;
+  --ex-muted: #475569;
+  --ex-border: rgba(29, 78, 216, 0.5);
+  --ex-rule: rgba(15, 23, 42, 0.14);
+  --ex-glow: transparent;
+  --ex-dot-on: #1d4ed8;
+  --ex-dot-off: rgba(71, 85, 105, 0.3);
+  --ex-link: #1d4ed8;
+  --ex-red: #be123c;
+  --ex-amber: #92600a;
+  --ex-violet: #6d28d9;
+  --ex-lime: #166534;
+  --ex-cyan: #0369a1;
+  --ex-mark-glow: none;
+}
+
+.devi { display: block; overflow: visible; }
+.devi-tara { color: var(--devi-tara); }
+.devi-kali { color: var(--devi-kali); }
+.devi-bhuvaneshwari { color: var(--devi-bhuvaneshwari); }
+.devi-tripurasundari { color: var(--devi-tripurasundari); }
+.devi-chhinnamasta { color: var(--devi-chhinnamasta); }
+.devi-kamala { color: var(--devi-kamala); }
+.devi-bhairavi { color: var(--devi-bhairavi); }
+.devi-bagalamukhi { color: var(--devi-bagalamukhi); }
+.devi-dhumavati { color: var(--devi-dhumavati); }
+.devi-matangi { color: var(--devi-matangi); }
+
+.explain-card {
+  background: var(--ex-bg);
+  color: var(--ex-fg);
+  border: 1px solid var(--ex-border);
+  border-radius: 6px;
+  box-shadow: 0 0 10px var(--ex-glow);
+  padding: 14px 16px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  max-width: 880px;
+  text-shadow: none;
+}
+.explain-card a:hover { text-shadow: none; }
+.explain-card .ex-rule { border-top: 1px solid var(--ex-rule); margin: 10px 0; }
+.explain-card .ex-muted { color: var(--ex-muted); }
+.explain-card .ex-header { display: flex; gap: 12px; align-items: flex-start; }
+.explain-card .ex-header-mark .devi { filter: var(--ex-mark-glow); }
+.explain-card .ex-header-main { min-width: 0; flex: 1; }
+.explain-card .ex-header-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.explain-card .ex-title { margin: 0; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; }
+.explain-card .ex-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 4px; font-size: 12px; }
+.explain-card .ex-tag { border: 1px solid currentColor; border-radius: 3px; padding: 0 6px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+.explain-card .ex-tag-red { color: var(--ex-red); }
+.explain-card .ex-tag-amber { color: var(--ex-amber); }
+.explain-card .ex-tag-violet { color: var(--ex-violet); }
+.explain-card .ex-tag-lime { color: var(--ex-lime); }
+.explain-card .ex-tag-cyan { color: var(--ex-cyan); }
+.explain-card .ex-section { margin: 8px 0; }
+.explain-card .ex-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 3px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--ex-fg); }
+.explain-card .ex-heading-sub { text-transform: none; letter-spacing: 0; font-weight: 400; }
+.explain-card .ex-mark { display: inline-flex; width: 18px; height: 18px; align-items: center; justify-content: center; }
+.explain-card .ex-body { margin: 0; }
+.explain-card .ex-list { margin: 0; padding-left: 18px; list-style: disc; }
+.explain-card .ex-evidence { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; }
+.explain-card .ex-dots { display: inline-flex; gap: 3px; }
+.explain-card .ex-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ex-dot-off); }
+.explain-card .ex-dot-on { background: var(--ex-dot-on); }
+.explain-card .ex-scenario { border-top: 1px solid var(--ex-rule); padding: 4px 0; }
+.explain-card .ex-scenario:first-child { border-top: 0; }
+.explain-card .ex-scenario-sum { cursor: pointer; }
+.explain-card .ex-scenario-sum:focus-visible { outline: 2px solid var(--ex-dot-on); outline-offset: 2px; }
+.explain-card .ex-dir { display: inline-block; width: 1.4em; color: var(--ex-muted); }
+.explain-card .ex-scenario-body { padding: 2px 0 2px 1.4em; }
+.explain-card .ex-scenario-body p { margin: 2px 0; }
+.explain-card .ex-timeline { margin: 4px 0 0; padding-left: 18px; }
+.explain-card .ex-link { color: var(--ex-link); }
+.explain-card .ex-footer { font-size: 11px; color: var(--ex-muted); }
+.explain-card .ex-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.ex-loading { font-size: 11px; opacity: 0.7; padding: 8px 0; }
+.explain-chip { display: inline-flex; align-items: center; gap: 4px; border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 3px; padding: 0 5px; font-size: 10px; line-height: 16px; height: 18px; white-space: nowrap; color: #cfe8ff; background: transparent; cursor: pointer; }
+.explain-chip:hover { border-color: rgba(0, 240, 255, 0.8); }
+@media (max-width: 640px) {
+  .explain-card { padding: 10px 12px; }
+  .explain-card .ex-header-mark .devi { width: 32px; height: 32px; }
+}
+
+/* ───────────────────────── Devi motion (single play, abstract) ─────────────────────────
+   Static frame = resolved final state. Animations run once when DeviMark adds .is-playing (>= 50% visible,
+   never with reduced motion). Only opacity, transform and stroke-dashoffset animate; no loops, no filters. */
+.devi { --devi-dur: 3s; --devi-ease: cubic-bezier(.4, 0, .2, 1); }
+
+/* resolved resting state of parts that animate toward it */
+.devi-tara-waves { transform-origin: 0 44px; transform: scaleY(0.35); }
+.devi-dhumavati-curls { opacity: 0.25; }
+.devi-tripurasundari-cluster { transform-origin: 32px 32px; }
+.devi-tripurasundari-cluster0 { --rot: -20deg; }
+.devi-tripurasundari-cluster120 { --rot: 20deg; }
+.devi-tripurasundari-cluster240 { --rot: -20deg; }
+.devi-bagalamukhi-zigzag { transform-origin: 32px 32px; }
+.devi-kamala-p { transform-origin: 32px 45px; }
+.devi-bhuvaneshwari-oval, .devi-chhinnamasta-centre, .devi-matangi-string { transform-box: fill-box; transform-origin: center; }
+
+/* Kali: arc sweeps once, the shadow dissolves, six dots rise and brighten */
+.devi.is-playing .devi-kali-arc { stroke-dasharray: 1; animation: devi-kali-arc var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-kali-shadow { animation: devi-kali-shadow var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-kali-dots { animation: devi-kali-dots var(--devi-dur) var(--devi-ease) 1 both; }
+@keyframes devi-kali-arc { 0% { stroke-dashoffset: 1; } 50%, 100% { stroke-dashoffset: 0; } }
+@keyframes devi-kali-shadow { 0%, 30% { opacity: 1; } 80%, 100% { opacity: 0.2; } }
+@keyframes devi-kali-dots { 0%, 60% { transform: translateY(6px); opacity: 0.2; } 100% { transform: translateY(0); opacity: 1; } }
+
+/* Tara: guiding dot crosses the water, waves ease toward stillness, lotus rises */
+.devi.is-playing .devi-tara-dot { animation: devi-tara-dot var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-tara-waves { animation: devi-tara-waves var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-tara-lotus { animation: devi-tara-lotus var(--devi-dur) var(--devi-ease) 1 both; }
+@keyframes devi-tara-dot { 0% { transform: translate(-34px, 5px); } 35% { transform: translate(-17px, -2px); } 70%, 100% { transform: translate(0, 0); } }
+@keyframes devi-tara-waves { 0%, 40% { transform: scaleY(1); } 100% { transform: scaleY(0.35); } }
+@keyframes devi-tara-lotus { 0%, 60% { opacity: 0; transform: translateY(4px); } 100% { opacity: 1; transform: translateY(0); } }
+
+/* Tripura Sundari: clusters align and grow, the centre appears last */
+.devi.is-playing .devi-tripurasundari-cluster { animation: devi-tripurasundari-cluster var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-tripurasundari-centre { animation: devi-tripurasundari-centre var(--devi-dur) var(--devi-ease) 1 both; }
+@keyframes devi-tripurasundari-cluster { 0% { transform: rotate(var(--rot)) scale(0.9); } 80%, 100% { transform: rotate(0deg) scale(1); } }
+@keyframes devi-tripurasundari-centre { 0%, 80% { opacity: 0; } 100% { opacity: 1; } }
+
+/* Bhuvaneshwari: the oval expands, horizon arcs draw in (staggered), the constellation fades in */
+.devi.is-playing .devi-bhuvaneshwari-oval { animation: devi-bhuvaneshwari-oval var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-bhuvaneshwari-arc { stroke-dasharray: 1; animation: devi-bhuvaneshwari-arc 1.6s var(--devi-ease) 0s 1 both; }
+.devi.is-playing .devi-bhuvaneshwari-arc2 { animation-delay: 0.3s; }
+.devi.is-playing .devi-bhuvaneshwari-arc3 { animation-delay: 0.6s; }
+.devi.is-playing .devi-bhuvaneshwari-dots { animation: devi-bhuvaneshwari-dots var(--devi-dur) var(--devi-ease) 1 both; }
+@keyframes devi-bhuvaneshwari-oval { 0% { transform: scale(0.6); } 70%, 100% { transform: scale(1); } }
+@keyframes devi-bhuvaneshwari-arc { 0% { stroke-dashoffset: 1; } 100% { stroke-dashoffset: 0; } }
+@keyframes devi-bhuvaneshwari-dots { 0%, 50% { opacity: 0; } 100% { opacity: 1; } }
+
+/* Bhairavi: the flame draws upward, wavers twice, settles; the triangle fades in beneath */
+.devi.is-playing .devi-bhairavi-flame { stroke-dasharray: 1; animation: devi-bhairavi-flame var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-bhairavi-triangle { animation: devi-bhairavi-triangle var(--devi-dur) var(--devi-ease) 1 both; }
+@keyframes devi-bhairavi-flame {
+  0% { stroke-dashoffset: 1; transform: translateX(0); }
+  50% { stroke-dashoffset: 0; transform: translateX(0); }
+  58% { transform: translateX(1.5px); }
+  66% { transform: translateX(-1.5px); }
+  74% { transform: translateX(1.5px); }
+  82% { transform: translateX(-1.5px); }
+  92%, 100% { transform: translateX(0); }
+}
+@keyframes devi-bhairavi-triangle { 0% { opacity: 0; } 40%, 100% { opacity: 0.55; } }
+
+/* Chhinnamasta: centre light grows, ribbons draw outward, end forms brighten */
+.devi.is-playing .devi-chhinnamasta-centre { animation: devi-chhinnamasta-centre var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-chhinnamasta-ribbon { stroke-dasharray: 1; animation: devi-chhinnamasta-ribbon var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-chhinnamasta-form { animation: devi-chhinnamasta-form var(--devi-dur) var(--devi-ease) 1 both; }
+@keyframes devi-chhinnamasta-centre { 0% { transform: scale(0); } 25%, 100% { transform: scale(1); } }
+@keyframes devi-chhinnamasta-ribbon { 0%, 20% { stroke-dashoffset: 1; } 75%, 100% { stroke-dashoffset: 0; } }
+@keyframes devi-chhinnamasta-form { 0%, 70% { opacity: 0.2; } 100% { opacity: 1; } }
+
+/* Kamala: petals open, showering arcs settle, dots fade in */
+.devi.is-playing .devi-kamala-p { animation: devi-kamala-p var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-kamala-shower { animation: devi-kamala-shower var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-kamala-dot { animation: devi-kamala-dot var(--devi-dur) var(--devi-ease) 1 both; }
+@keyframes devi-kamala-p { 0% { transform: rotate(var(--r)) scale(0.7); } 70%, 100% { transform: rotate(0deg) scale(1); } }
+@keyframes devi-kamala-shower { 0% { opacity: 0; stroke-dashoffset: 8; } 20% { opacity: 1; stroke-dashoffset: 8; } 80%, 100% { opacity: 1; stroke-dashoffset: 0; } }
+@keyframes devi-kamala-dot { 0%, 60% { opacity: 0; } 100% { opacity: 1; } }
+
+/* Dhumavati: the ring draws from its gap, the smoke rises and thins around the empty centre */
+.devi.is-playing .devi-dhumavati-ring { stroke-dasharray: 1; animation: devi-dhumavati-ring var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-dhumavati-curls { animation: devi-dhumavati-curls var(--devi-dur) var(--devi-ease) 1 both; }
+@keyframes devi-dhumavati-ring { 0% { stroke-dashoffset: 1; } 60%, 100% { stroke-dashoffset: 0; } }
+@keyframes devi-dhumavati-curls { 0% { transform: translateY(8px); opacity: 0.8; } 100% { transform: translateY(0); opacity: 0.25; } }
+
+/* Bagalamukhi: turbulence settles into the line, the bracket closes gently */
+.devi.is-playing .devi-bagalamukhi-zigzag { animation: devi-bagalamukhi-zigzag var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-bagalamukhi-bracket-l { animation: devi-bagalamukhi-bracket-l var(--devi-dur) var(--devi-ease) 1 both; }
+.devi.is-playing .devi-bagalamukhi-bracket-r { animation: devi-bagalamukhi-bracket-r var(--devi-dur) var(--devi-ease) 1 both; }
+@keyframes devi-bagalamukhi-zigzag { 0% { transform: scaleY(1.8); } 70%, 100% { transform: scaleY(1); } }
+@keyframes devi-bagalamukhi-bracket-l { 0%, 30% { transform: translateX(-3px); } 90%, 100% { transform: translateX(0); } }
+@keyframes devi-bagalamukhi-bracket-r { 0%, 30% { transform: translateX(3px); } 90%, 100% { transform: translateX(0); } }
+
+/* Matangi: four strings vibrate with decaying oscillations (staggered) into an ordered pattern */
+.devi.is-playing .devi-matangi-string { animation: devi-matangi-string 2.4s var(--devi-ease) 0s 1 both; }
+.devi.is-playing .devi-matangi-string2 { animation-delay: 0.15s; }
+.devi.is-playing .devi-matangi-string3 { animation-delay: 0.3s; }
+.devi.is-playing .devi-matangi-string4 { animation-delay: 0.45s; }
+@keyframes devi-matangi-string { 0% { transform: scaleY(1.4); } 25% { transform: scaleY(0.8); } 50% { transform: scaleY(1.15); } 75% { transform: scaleY(0.95); } 100% { transform: scaleY(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .devi, .devi * { animation: none !important; }
+}
+
+/* glossary hovers, heat badge, "what changed", sidebar */
+.explain-card .ex-gloss { border-bottom: 1px dotted currentColor; cursor: help; position: relative; outline: none; }
+.explain-card .ex-gloss:hover::after, .explain-card .ex-gloss:focus::after {
+  content: attr(data-def); position: absolute; left: 0; top: 100%; z-index: 20; width: max-content; max-width: 260px;
+  margin-top: 3px; padding: 5px 8px; font-size: 11px; line-height: 1.35; font-weight: 400; letter-spacing: 0; text-transform: none;
+  white-space: normal; background: var(--ex-bg); color: var(--ex-fg); border: 1px solid var(--ex-border); border-radius: 4px;
+}
+.explain-card .ex-gloss:focus-visible { outline: 2px solid var(--ex-dot-on); outline-offset: 1px; }
+.explain-card .ex-heat-row { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 4px; font-size: 12px; }
+.explain-card .ex-heat { font-weight: 600; color: var(--ex-amber); }
+.explain-card .ex-change { margin: 4px 0 0; font-size: 12px; }
+.big-news-row .ex-dots { display: inline-flex; gap: 3px; }
+.big-news-row .ex-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ex-dot-off); display: inline-block; }
+.big-news-row .ex-dot-on { background: var(--ex-dot-on); }
+.ex-chip-tag { border: 1px solid currentColor; border-radius: 3px; padding: 0 4px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; }
+.ex-chip-tag.ex-tag-red { color: var(--ex-red); }
+.ex-chip-tag.ex-tag-amber { color: var(--ex-amber); }
+.ex-chip-tag.ex-tag-violet { color: var(--ex-violet); }
+.ex-chip-tag.ex-tag-lime { color: var(--ex-lime); }
+.ex-chip-tag.ex-tag-cyan { color: var(--ex-cyan); }
+
+/* ───────────────────────── match Sahasra's neon shell (dark navy, cyan/violet glow, mono labels) ─────────────────────────
+   The app is dark-neon only (no OS light-scheme switch), so the explain tokens default to dark and only
+   [data-theme="light"] (earlier in this file) can lighten them. Neon glow is on borders only; text stays crisp. */
+:root {
+  --ex-bg: rgba(15, 23, 42, 0.55);
+  --ex-fg: #cbd5e1;
+  --ex-muted: #7c8aa3;
+  --ex-border: rgba(6, 182, 212, 0.34);
+  --ex-rule: rgba(30, 41, 59, 0.95);
+  --ex-glow: rgba(0, 240, 255, 0.2);
+  --ex-dot-on: #22d3ee;
+  --ex-dot-off: rgba(124, 138, 163, 0.35);
+  --ex-link: #67e8f9;
+  --ex-red: #fb7185;
+  --ex-amber: #fbbf24;
+  --ex-violet: #a78bfa;
+  --ex-lime: #4ade80;
+  --ex-cyan: #38bdf8;
+  --ex-mark-glow: drop-shadow(0 0 1px rgba(0, 240, 255, 0.55));
+}
+.explain-card {
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.55;
+  background: var(--ex-bg);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 8px var(--ex-glow), inset 0 0 0 1px rgba(157, 77, 255, 0.06);
+}
+.explain-card .ex-header {
+  background: radial-gradient(ellipse 320px 90px at 0% 0%, rgba(157, 77, 255, 0.14), transparent 70%);
+  margin: -14px -16px 0;
+  padding: 14px 16px 10px;
+  border-radius: 6px 6px 0 0;
+}
+.explain-card .ex-title { color: #67e8f9; font-size: 11px; letter-spacing: 0.22em; }
+.explain-card .ex-heading { font-size: 10px; letter-spacing: 0.16em; color: #e2e8f0; }
+.explain-card .ex-tag { background: color-mix(in srgb, currentColor 10%, transparent); border-radius: 3px; font-size: 10px; letter-spacing: 0.05em; padding: 0 5px; }
+.explain-card .ex-scenario-sum:hover .ex-scenario-title { color: #f1f5f9; }
+.explain-card .ex-about { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ex-muted); }
+.explain-card .ex-about:hover { color: var(--ex-link); }
+.ex-chip-tag { background: color-mix(in srgb, currentColor 10%, transparent); }
+.big-news-row:hover { box-shadow: inset 0 0 0 1px rgba(0, 240, 255, 0.22); border-radius: 3px; }
+.devi-legend-item { background: rgba(15, 23, 42, 0.4); transition: border-color 0.2s, box-shadow 0.2s; }
+.devi-legend-item:hover, .devi-legend-item:target { border-color: rgba(6, 182, 212, 0.45) !important; box-shadow: 0 0 8px rgba(0, 240, 255, 0.2); }
+.devi-legend-note { border-left: 2px solid rgba(157, 77, 255, 0.55); padding-left: 10px; }
+@media (max-width: 640px) {
+  .explain-card .ex-header { margin: -10px -12px 0; padding: 10px 12px 8px; }
+}

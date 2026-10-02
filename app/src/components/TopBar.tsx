@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { DeviMark } from "@/components/devi";
 import { useFeedStore } from "@/store/useFeedStore";
 import { SahasraLotus } from "@/components/SahasraLotus";
 import { SearchBox } from "@/components/SearchBox";
@@ -58,6 +60,13 @@ export function TopBar() {
           <span>the final path to the Oneness</span>
           <span className="sahasra-rule" aria-hidden="true" />
         </p>
+        <Link
+          href="/about/devis"
+          className="mt-1.5 inline-flex items-center gap-1.5 font-mono text-[10px] leading-none tracking-[0.26em] text-slate-500 hover:text-cyan-300"
+        >
+          <DeviMark devi="tara" size={12} tooltip={false} />
+          <span>TEN LENSES</span>
+        </Link>
       </div>
 
       {/* right: live status (unchanged semantics from the original bar) */}

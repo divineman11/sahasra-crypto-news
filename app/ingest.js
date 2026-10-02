@@ -189,6 +189,7 @@ async function main() {
     }
   };
   const tierBTimer = setInterval(refreshTierB, 60 * 60000);
+  const explainTimer = setInterval(() => { require('./ingest/explain/events').tick(); }, 10 * 60000);
   setTimeout(() => { refreshTierB(); }, 20000);
   const futuresHook = setInterval(() => {
     if (!futuresFirstRun && symbols.binanceFuturesBases().length) {
@@ -214,6 +215,7 @@ async function main() {
       scheduler.stop();
       clearInterval(basesTimer);
       clearInterval(tierBTimer);
+      clearInterval(explainTimer);
       clearInterval(futuresHook);
       clearInterval(universeTimer);
       if (typeof stopNewsFile === 'function') stopNewsFile();

@@ -8,6 +8,7 @@ import { useFeedStore } from "@/store/useFeedStore";
 import { useLabel } from "@/hooks/useLabel";
 import { isSimulated } from "@/lib/simulated";
 import { mediaThumb } from "@/lib/mediaThumb";
+import { ExplainLoader } from "@/components/explain/ExplainLoader";
 import {
   ageMs,
   fmtAge,
@@ -67,6 +68,7 @@ export function PostDetail({ post }: { post: PostDTO }) {
       : null;
 
   const thumb = post.kind === "media" ? mediaThumb(post.url) : null;
+  const explainId = post.explainEventId ?? siblings.find((p) => p.explainEventId)?.explainEventId ?? null;
 
   return (
     <div className="max-w-4xl p-4 text-xs font-mono text-slate-300">
@@ -143,6 +145,12 @@ export function PostDetail({ post }: { post: PostDTO }) {
               </button>
             </span>
           ))}
+        </div>
+      ) : null}
+
+      {explainId ? (
+        <div className="mt-3">
+          <ExplainLoader id={explainId} />
         </div>
       ) : null}
 

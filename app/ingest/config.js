@@ -140,4 +140,10 @@ const REDDIT_SUBS = [
   { sub: 'defi', minScore: 30, rssTake: 5 },
 ];
 
-module.exports = { BROWSER_UA, SEC_UA, DISCORD_WEBHOOK, PORTFOLIO, NEWS_LIVE_JSON, KEEP_DAYS, CRYPTO_FILTER, BSKY_FILTER, RSS_FEEDS, MACRO_FILTER, TG_CHANNELS, YT_CHANNELS, BSKY_ACCOUNTS, REDDIT_SUBS };
+// Explain cards: exchanges that can trigger a card, on/off switch, optional external rewrite command.
+const TOP_EXCHANGES = ['binance', 'coinbase', 'okx', 'bybit', 'upbit', 'kraken', 'bithumb'];
+const EXPLAIN_ENABLED = process.env.EXPLAIN_ENABLED !== '0';
+const EXPLAIN_REWRITE_CMD = process.env.EXPLAIN_REWRITE_CMD || '';
+const EXPLAIN_REWRITE_DAILY_MAX = parseInt(process.env.EXPLAIN_REWRITE_DAILY_MAX || '20', 10) || 20;
+
+module.exports = { TOP_EXCHANGES, EXPLAIN_ENABLED, EXPLAIN_REWRITE_CMD, EXPLAIN_REWRITE_DAILY_MAX, BROWSER_UA, SEC_UA, DISCORD_WEBHOOK, PORTFOLIO, NEWS_LIVE_JSON, KEEP_DAYS, CRYPTO_FILTER, BSKY_FILTER, RSS_FEEDS, MACRO_FILTER, TG_CHANNELS, YT_CHANNELS, BSKY_ACCOUNTS, REDDIT_SUBS };
