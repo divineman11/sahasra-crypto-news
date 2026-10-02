@@ -15,35 +15,46 @@ function median(a) {
   return Math.round((s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) * 10) / 10;
 }
 
+const isInt = (x) => typeof x === 'number' && Number.isInteger(x);
+const goodSeed = (s) => !!s && typeof s === 'object' && isInt(s.n) && s.n > 0 && isInt(s.lower_vs_btc_d30)
+  && s.lower_vs_btc_d30 >= 0 && s.lower_vs_btc_d30 <= s.n && (s.median_vs_btc_d30 == null || Number.isFinite(s.median_vs_btc_d30));
+const goodRow = (r) => !!r && r.status === 'done' && typeof r.category === 'string' && typeof r.subtype === 'string'
+  && !!r.d30 && typeof r.d30.ret_vs_btc === 'number' && Number.isFinite(r.d30.ret_vs_btc) && Number.isFinite(Date.parse(r.t0));
+// The minimum can be raised but never lowered below MIN_N.
+const effMin = (...xs) => Math.max(MIN_N, ...xs.map((x) => (Number.isFinite(Number(x)) ? Number(x) : 0)));
+
 /**
  * @param rows  forward-log rows (latest per event)
  * @param seed  { "category:subtype": { n, lower_vs_btc_d30, median_vs_btc_d30, source } } | null
+ * The median comes from the underlying observations only: with a seed AND log rows there is no combined
+ * median (a weighted median is not a pooled median), so the field is omitted.
  */
 function rebuild({ rows, seed, now, minN = MIN_N }) {
   const groups = {};
   for (const r of rows || []) {
-    if (r.status !== 'done' || !r.d30 || r.d30.ret_vs_btc == null) continue;
+    if (!goodRow(r)) continue;
     (groups[r.category + ':' + r.subtype] = groups[r.category + ':' + r.subtype] || []).push(r.d30.ret_vs_btc);
   }
-  const out = { built_at: new Date(now).toISOString(), min_n: minN };
+  const out = { built_at: new Date(now).toISOString(), min_n: effMin(minN) };
   const keys = new Set([...Object.keys(groups), ...Object.keys(seed || {}).filter((k) => seed[k] && typeof seed[k] === 'object')]);
   for (const k of keys) {
     const g = groups[k] || [];
-    const s = seed && seed[k] && seed[k].n > 0 ? seed[k] : null;
-    const logMed = median(g);
+    const s = goodSeed(seed && seed[k]) ? seed[k] : null;
+    if (!g.length && !s) continue;
     const lower = g.filter((x) => x < 0).length;
-    const n = g.length + (s ? s.n : 0);
-    let med = logMed;
-    if (s && g.length) med = Math.round(((s.median_vs_btc_d30 * s.n + logMed * g.length) / n) * 10) / 10; // n-weighted
-    else if (s) med = s.median_vs_btc_d30;
-    out[k] = {
-      n,
-      lower_vs_btc_d30: lower + (s ? s.lower_vs_btc_d30 : 0),
-      median_vs_btc_d30: med,
-      source: s ? `${s.source || 'seed'}${g.length ? ' + forward log' : ''}` : 'forward log',
-    };
+    const e = { n: g.length + (s ? s.n : 0), lower_vs_btc_d30: lower + (s ? s.lower_vs_btc_d30 : 0) };
+    if (s && !g.length) { if (s.median_vs_btc_d30 != null) e.median_vs_btc_d30 = s.median_vs_btc_d30; }
+    else if (!s) e.median_vs_btc_d30 = median(g);
+    e.source = s ? `${s.source || 'seed'}${g.length ? ' + forward log' : ''}` : 'forward log';
+    out[k] = e;
   }
   return out;
+}
+
+// n >= minimum (never below 20), integer counts, 0 <= lower <= n.
+function validEntry(e, min = MIN_N) {
+  return !!e && typeof e === 'object' && isInt(e.n) && e.n >= Math.max(MIN_N, min) && isInt(e.lower_vs_btc_d30)
+    && e.lower_vs_btc_d30 >= 0 && e.lower_vs_btc_d30 <= e.n;
 }
 
 function createStore({ dir, now = () => Date.now(), outcomes = null, log = (m) => console.log(m), minN = MIN_N }) {
@@ -69,10 +80,11 @@ function createStore({ dir, now = () => Date.now(), outcomes = null, log = (m) =
     const d = read();
     if (!d) return null;
     const e = d[key];
-    return e && typeof e === 'object' && e.n >= (d.min_n || minN) ? e : null;
+    return validEntry(e, effMin(d.min_n, minN)) ? e : null;
   }
   function rebuildNow() {
-    const data = rebuild({ rows: outcomes ? outcomes.all() : [], seed: loadSeed(), now: now(), minN });
+    const seed = loadSeed();
+    const data = rebuild({ rows: outcomes ? (outcomes.allWithArchive ? outcomes.allWithArchive() : outcomes.all()) : [], seed, now: now(), minN });
     fs.mkdirSync(dir, { recursive: true });
     const tmp = file + '.tmp';
     fs.writeFileSync(tmp, JSON.stringify(data, null, 2));
@@ -93,4 +105,4 @@ function createStore({ dir, now = () => Date.now(), outcomes = null, log = (m) =
   return { get, rebuildNow, maybeRebuild, file, seedFile };
 }
 
-module.exports = { rebuild, createStore, median, MIN_N };
+module.exports = { rebuild, createStore, median, validEntry, MIN_N };

@@ -51,7 +51,7 @@ function createEngine(opts = {}) {
   let events = null;
   const rewriter = opts.rewriteCmd ? createRewriter({ dir, cmd: opts.rewriteCmd, dailyMax: opts.rewriteDailyMax || 20, now: nowFn, timeoutMs: opts.rewriteTimeoutMs || 20000, log }) : null;
   const fetchHeat = opts.fetchHeat || null; // (ticker) -> {range_24h_pct}
-  const outcomes = opts.priceFn ? outcomesLib.createOutcomes({ dir, now: nowFn, priceFn: opts.priceFn, log }) : null;
+  const outcomes = opts.priceFn ? outcomesLib.createOutcomes({ dir, now: nowFn, priceFn: opts.priceFn, priceAtFn: opts.priceAtFn || null, log }) : null;
   const rates = baseRatesLib.createStore({ dir, now: nowFn, outcomes, log, minN: opts.minN });
   let lastOutcomesRun = 0;
   const pending = new Set();
@@ -79,21 +79,27 @@ function createEngine(opts = {}) {
   }
 
   const MEASURE = { unlock: 'coins were lower vs BTC 30 days after an unlock this big' };
-  // "Historically X of N ..." only from base_rates.json and only when n >= min_n; else the literal stays.
+  const NO_CASES = 'Not enough comparable cases';
+  // "Historically X of N ..." only from base_rates.json and only when n >= min_n (never below 20); otherwise any
+  // stale line is cleared and the literal "Not enough comparable cases" is restored.
   function applyBaseRate(ev) {
     const br = rates.get(ev.category + ':' + ev.subtype);
-    if (!br) return;
     const down = ev.text.scenarios.find((s) => s.dir === 'down');
+    if (!br) {
+      for (const s of ev.text.scenarios) s.base_rate = null;
+      if (!ev.text.uncertain.includes(NO_CASES)) ev.text.uncertain.push(NO_CASES);
+      return;
+    }
     if (down) down.base_rate = { x: br.lower_vs_btc_d30, n: br.n, measure: MEASURE[ev.category] || 'coins were lower vs BTC 30 days after an event like this' };
-    ev.text.uncertain = ev.text.uncertain.filter((u) => u !== 'Not enough comparable cases');
+    ev.text.uncertain = ev.text.uncertain.filter((u) => u !== NO_CASES);
   }
 
-  // Past cases from the forward log: same category:subtype, same coin first, finished rows before open ones.
+  // Past cases from the forward log: COMPLETED rows only (open ones have no outcome yet), same category:subtype, same coin first, newest first.
   function setHistory(ev) {
     if (!outcomes) return;
     const coin = ev.coin ? ev.coin.ticker : null;
-    const rows = outcomes.all().filter((r) => r.category === ev.category && r.subtype === ev.subtype && r.event_id !== ev.id && r.status !== 'no_price');
-    rows.sort((a, b) => ((b.coin === coin) - (a.coin === coin)) || ((b.status === 'done') - (a.status === 'done')) || (Date.parse(b.t0) - Date.parse(a.t0)));
+    const rows = (outcomes.allWithArchive || outcomes.all)().filter((r) => r.category === ev.category && r.subtype === ev.subtype && r.event_id !== ev.id && r.status === 'done');
+    rows.sort((a, b) => ((b.coin === coin) - (a.coin === coin)) || (Date.parse(b.t0) - Date.parse(a.t0)));
     const cases = rows.slice(0, 5).map((r) => ({ date: r.date, coin: r.coin, headline: r.headline, r1: r.d1 ? r.d1.ret_vs_btc : null, r7: r.d7 ? r.d7.ret_vs_btc : null, r30: r.d30 ? r.d30.ret_vs_btc : null }));
     ev.history = { cases, note: cases.length ? null : 'Not enough comparable cases' };
   }
@@ -222,7 +228,7 @@ function createEngine(opts = {}) {
     ev.last_change = null;
     events.push(ev);
     save();
-    if (live && outcomes) bg(outcomes.record(ev));
+    if (outcomes) bg(outcomes.record(ev)); // baseline at creation, queued or live
     afterChange(ev);
     log(`[explain] new ${ev.state} event ${ev.id} (${g.reason})`);
     return ev;
@@ -240,7 +246,7 @@ function createEngine(opts = {}) {
       q[0].state = 'live';
       q[0].live_at = new Date(now).toISOString();
       q[0].updated_at = q[0].live_at;
-      if (outcomes) bg(outcomes.record(q[0]));
+      if (outcomes) bg(outcomes.markLive(q[0])); // measurements stay anchored to creation
       n++;
       log(`[explain] promoted ${q[0].id}`);
     }
@@ -267,7 +273,7 @@ function createEngine(opts = {}) {
 
   function tick() {
     const r = { promoted: promoteQueue(), ...closeOld() };
-    try { rates.maybeRebuild(); } catch (e) { log('[explain] base rates error: ' + e.message); }
+    try { if (rates.maybeRebuild()) refreshDerived(); } catch (e) { log('[explain] base rates error: ' + e.message); }
     if (outcomes && nowFn() - lastOutcomesRun >= HOUR) {
       lastOutcomesRun = nowFn();
       bg(outcomes.run().then((n) => { if (n) refreshDerived(); }));

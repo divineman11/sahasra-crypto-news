@@ -15,6 +15,13 @@ function fmtCount(n) {
   return Math.round(n).toLocaleString('en-US');
 }
 const fmtUsd = (n) => (n == null ? null : '$' + fmtCount(n));
+// Loss stated in the dollar figure if there is one, otherwise in coins ("114.09 ETH"); null when neither is known.
+function fmtQty(n) { return n >= 1e6 ? fmtCount(n) : Number(n).toLocaleString('en-US', { maximumFractionDigits: 6 }); }
+function lossText(f) {
+  if (f.amount_usd != null) return fmtUsd(f.amount_usd);
+  if (f.amount_coin && f.amount_coin.qty > 0 && f.amount_coin.symbol) return `${fmtQty(f.amount_coin.qty)} ${f.amount_coin.symbol}`;
+  return null;
+}
 
 const sc = (dir, title, timeframe, condition, evidence) => ({ dir, title, timeframe, condition, evidence, base_rate: null });
 const w = (label, detail) => ({ label, detail });
@@ -79,7 +86,8 @@ function theft(f) {
   const P = f.project || f.ticker || 'A project';
   const src = f.source || 'the source';
   const d = dateOf(f);
-  const amt = f.amount_usd != null ? `about ${fmtUsd(f.amount_usd)}` : 'an amount that is not yet confirmed';
+  const loss = lossText(f);
+  const amt = loss ? `about ${loss}` : 'an amount that is not yet confirmed';
   return {
     what: `${P} lost ${amt} to a hacker${on(d)}, reported by ${src}.`,
     why: 'Money is gone, trust is hurt, and stolen coins may be moved onto the market.',
@@ -107,7 +115,8 @@ function exploit(f) {
   const P = f.project || f.ticker || 'A project';
   const src = f.source || 'the source';
   const d = dateOf(f);
-  const amt = f.amount_usd != null ? ` Reports mention about ${fmtUsd(f.amount_usd)}.` : '';
+  const loss = lossText(f);
+  const amt = loss ? ` Reports mention about ${loss}.` : '';
   return Object.assign(theft(f), {
     what: `${P} reported a security problem in its code${on(d)}, according to ${src}.${amt}`,
     why: 'A flaw in the code can let someone take funds or break the rules of the system. Until it is fixed, users are exposed.',

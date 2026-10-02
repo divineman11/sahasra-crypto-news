@@ -7,6 +7,12 @@ const GLYPH: Record<ExplainScenario["dir"], { g: string; word: string }> = {
   chop: { g: "◆", word: "Sideways" },
 };
 
+// "Historically X of N" is shown only for a sane count: integers, N at least 20, 0 <= X <= N.
+const MIN_CASES = 20;
+function validBaseRate(b: { x: number; n: number }): boolean {
+  return Number.isInteger(b.n) && Number.isInteger(b.x) && b.n >= MIN_CASES && b.x >= 0 && b.x <= b.n;
+}
+
 // Three collapsible scenarios, first open. Native <details>: Enter/Space work, focusable.
 export function Scenarios({ scenarios, note }: { scenarios: ExplainScenario[]; note: string | null }) {
   return (
@@ -22,7 +28,7 @@ export function Scenarios({ scenarios, note }: { scenarios: ExplainScenario[]; n
           <div className="ex-scenario-body">
             <p><span className="ex-muted">Condition:</span> <Gloss text={s.condition} /></p>
             <p><span className="ex-muted">We would know because:</span> <Gloss text={s.evidence} /></p>
-            {s.base_rate ? (
+            {s.base_rate && validBaseRate(s.base_rate) ? (
               <p className="ex-base">Historically {s.base_rate.x} of {s.base_rate.n} {s.base_rate.measure}.</p>
             ) : i === 0 && note ? (
               <p className="ex-muted">{note}</p>
