@@ -12,7 +12,10 @@ const REGEXPS = {
 };
 
 // Token unlocks / vesting cliffs / emissions. Tested right after delisting, before listing.
-REGEXPS.unlock = /\b(unlock(s|ed|ing)?|vesting cliffs?|token releases?|emissions?|tokens? (will )?(be )?unlocked)\b/i;
+// Context-anchored (a bare "unlocks"/"emissions" is far too common in non-crypto news).
+const UNLOCK_POS_RE = /\b(token unlocks?|vesting (cliff|schedule)s?|cliff unlocks?|token emissions?|tokens? (will )?(be )?unlocked|unlock(s|ed|ing)?\b[^.]{0,60}\b(tokens?|supply|circulation|\d+(\.\d+)?\s*(%|(bn|[bmk]|billion|million)\b))|\d[\d,.]*\s*%\s*of\b[^.]{0,30}\b(supply|circulating|tokens?)\b[^.]{0,30}\bunlock|(\d[\d,.]*\s*(bn|[bmk]|billion|million)?|\$[\d.,]+[bmk]?)\s*(worth of\s+)?([A-Za-z0-9]{2,10}\s+)?tokens?\b[^.]{0,30}\b(unlock|releas|vest|enter|hit)|releas(e|es|ed|ing)\s+[\d$][\d,.]*\s*(bn|[bmk]|billion|million)?\s*tokens?\b)/i;
+const UNLOCK_NEG_RE = /\b(release notes|releases?\s+v\d|(software|protocol|mainnet|client|press) release|unlocks? (new|access|features?|staking|support|power|potential|liquidity)|carbon emissions)\b/i;
+REGEXPS.unlock = { test: (s) => UNLOCK_POS_RE.test(s) && !UNLOCK_NEG_RE.test(s) };
 
 const CATEGORY_ORDER = ['hack', 'delisting', 'unlock', 'etf', 'listing', 'regulatory', 'maintenance'];
 
@@ -116,9 +119,11 @@ function detectCategory(raw) {
   return { category: 'other', phishing: false };
 }
 
-// Token amount ("1.66B", "1.655 billion", "113M tokens") and % of supply ("16.3% of total supply").
+// Token amount ("1.66B", "1.655 billion", "113M tokens", "1,655,000,000 tokens") and % of supply
+// ("16.3% of total supply", "48% of circulating", "5% of tokens enter circulation", "1.5% supply").
 const UNLOCK_AMOUNT_RE = /(?<![$\d.,])(\d[\d,]*(?:\.\d+)?)\s*(billion|million|thousand|bn|b|m|k)\b(?!\s*(?:usd|dollars?|worth))/i;
-const UNLOCK_PCT_RE = /(\d+(?:\.\d+)?)\s*%\s*of\s+(?:the\s+)?(?:(?:total|circulating|current|max(?:imum)?|token)\s+)*(?:supply|circulation)/i;
+const UNLOCK_AMOUNT_PLAIN_RE = /(?<![$\d.,])(\d{1,3}(?:,\d{3})+|\d{7,})\s*(?:[A-Za-z0-9]{2,10}\s+)?tokens?\b/i;
+const UNLOCK_PCT_RE = /(\d+(?:\.\d+)?)\s*%\s*(?:of\s+(?:the\s+)?)?((?:(?:total|circulating|current|max(?:imum)?|token)\s+)*)(?:supply|circulation|circulating|tokens?)\b/i;
 const UNIT_MULT = { billion: 1e9, bn: 1e9, b: 1e9, million: 1e6, m: 1e6, thousand: 1e3, k: 1e3 };
 
 function parseUnlock(title) {
@@ -127,11 +132,21 @@ function parseUnlock(title) {
   if (m) {
     const n = parseFloat(m[1].replace(/,/g, ''));
     if (isFinite(n)) amount = Math.round(n * UNIT_MULT[m[2].toLowerCase()]);
+  } else if ((m = UNLOCK_AMOUNT_PLAIN_RE.exec(title))) {
+    const n = parseFloat(m[1].replace(/,/g, ''));
+    if (isFinite(n)) amount = Math.round(n);
   }
   let pct = null;
+  let basis = null;
   m = UNLOCK_PCT_RE.exec(title);
-  if (m) pct = parseFloat(m[1]);
-  return { amount, pct };
+  if (m) {
+    pct = parseFloat(m[1]);
+    const ctx = m[0] + ' ' + title.slice(m.index + m[0].length, m.index + m[0].length + 25);
+    if (/circulat/i.test(ctx)) basis = 'circulating';
+    else if (/max/i.test(m[0])) basis = 'max';
+    else if (/total/i.test(m[0])) basis = 'total';
+  }
+  return { amount, pct, basis };
 }
 
 function sentimentFor(category, title) {
@@ -235,7 +250,8 @@ function classify(raw, tickers) {
   let unlockInfo = null;
   if (category === 'unlock') {
     unlockInfo = parseUnlock(title);
-    importance = (unlockInfo.pct !== null && unlockInfo.pct >= 5) || (unlockInfo.amount !== null && unlockInfo.amount >= 1e9) ? 80 : 60;
+    // kind 'symbol' (new-market notices) keeps its own importance; promos never reach here (category forced to 'other').
+    if (kind !== 'symbol' && !isPromo) importance = unlockInfo.pct !== null && unlockInfo.pct >= 5 ? 80 : 60;
   }
   if (importanceOverride !== null) importance = importanceOverride;
   // Tier-4 (per-coin search) filler: price-move bots, predictions, listicles.
@@ -258,6 +274,7 @@ function classify(raw, tickers) {
   if (unlockInfo) {
     out.unlockAmount = unlockInfo.amount;
     out.unlockPct = unlockInfo.pct;
+    out.unlockPctBasis = unlockInfo.basis;
   }
   return withCap(raw, out);
 }
