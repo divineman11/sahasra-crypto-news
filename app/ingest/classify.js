@@ -13,8 +13,8 @@ const REGEXPS = {
 
 // Token unlocks / vesting cliffs / emissions. Tested right after delisting, before listing.
 // Context-anchored (a bare "unlocks"/"emissions" is far too common in non-crypto news).
-const UNLOCK_POS_RE = /\b(token unlocks?|vesting (cliff|schedule)s?|cliff unlocks?|token emissions?|tokens? (will )?(be )?unlocked|unlock(s|ed|ing)?\b[^.]{0,60}\b(tokens?|supply|circulation|\d+(\.\d+)?\s*(%|(bn|[bmk]|billion|million)\b))|\d[\d,.]*\s*%\s*of\b[^.]{0,30}\b(supply|circulating|tokens?)\b[^.]{0,30}\bunlock|(\d[\d,.]*\s*(bn|[bmk]|billion|million)?|\$[\d.,]+[bmk]?)\s*(worth of\s+)?([A-Za-z0-9]{2,10}\s+)?tokens?\b[^.]{0,30}\b(unlock|releas|vest|enter|hit)|releas(e|es|ed|ing)\s+[\d$][\d,.]*\s*(bn|[bmk]|billion|million)?\s*tokens?\b)/i;
-const UNLOCK_NEG_RE = /\b(release notes|releases?\s+v\d|(software|protocol|mainnet|client|press) release|unlocks? (new|access|features?|staking|support|power|potential|liquidity)|carbon emissions)\b/i;
+const UNLOCK_POS_RE = /\b(token unlocks?|vesting (cliff|schedule)s?|cliff unlocks?|token emissions?|tokens? (will )?(be )?unlocked|unlock(s|ed|ing)?\b[^.]{0,60}\b(tokens?|supply|circulation|coins|(?<![$€£¥\d.,])(?<![$€£¥]\s)\d+(\.\d+)?\s*(%|((bn|[bmk]|billion|million)\b(?!\s*(usd|dollars?|euros?|pounds?)))))|\d[\d,.]*\s*%\s*of\b[^.]{0,30}\b(supply|circulating|tokens?)\b[^.]{0,30}\bunlock|(\d[\d,.]*\s*(bn|[bmk]|billion|million)?|\$[\d.,]+[bmk]?)\s*(worth of\s+)?([A-Za-z0-9]{2,10}\s+)?tokens?\b[^.]{0,30}\b(unlock|releas|vest|enter|hit)|releas(e|es|ed|ing)\s+[\d$][\d,.]*\s*(bn|[bmk]|billion|million)?\s*tokens?\b)/i;
+const UNLOCK_NEG_RE = /\b(release notes|releases?\s+v\d|(software|protocol|mainnet|client|press) release|unlocks? (new|access|features?|staking|support|power|potential|liquidity)|carbon emissions|imf|world bank|loans?|bail-?outs?|credit lines?|tranches?|disburse(s|d|ments?)?|(in|of) funding|funding for|funds? for)\b/i;
 REGEXPS.unlock = { test: (s) => UNLOCK_POS_RE.test(s) && !UNLOCK_NEG_RE.test(s) };
 
 const CATEGORY_ORDER = ['hack', 'delisting', 'unlock', 'etf', 'listing', 'regulatory', 'maintenance'];
