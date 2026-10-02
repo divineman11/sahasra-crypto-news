@@ -103,6 +103,17 @@ function FeedRowImpl({ story, now, savedSet }: { story: StoryView; now: number; 
               <DeviMark devi="tara" size={16} tooltip={false} />
               <span className="hidden lg:inline">{expanded ? "Close ✕" : "Understand this"}</span>
             </button>
+          ) : post.instruments.length > 0 ? (
+            <Link
+              href={`/coin/${post.instruments[0].ticker}`}
+              className="explain-chip"
+              title={`Understand ${post.instruments[0].ticker}: a plain-words summary of this coin`}
+              aria-label={`Understand ${post.instruments[0].ticker}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <DeviMark devi="tara" size={16} tooltip={false} />
+              <span className="hidden lg:inline">Understand {post.instruments[0].ticker}</span>
+            </Link>
           ) : null}
           {inlineTickers.map((t) => (
             <Link
