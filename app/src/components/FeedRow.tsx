@@ -95,12 +95,13 @@ function FeedRowImpl({ story, now, savedSet }: { story: StoryView; now: number; 
             <button
               type="button"
               className="explain-chip"
-              title="Understand this: a plain-words explanation"
-              aria-label="Understand this"
-              onClick={() => { if (!expanded) toggleExpanded(post.id); }}
+              title={expanded ? "Close the explanation" : "Understand this: a plain-words explanation"}
+              aria-label={expanded ? "Close the explanation" : "Understand this"}
+              aria-expanded={expanded}
+              onClick={() => toggleExpanded(post.id)}
             >
               <DeviMark devi="tara" size={16} tooltip={false} />
-              <span className="hidden lg:inline">Understand this</span>
+              <span className="hidden lg:inline">{expanded ? "Close ✕" : "Understand this"}</span>
             </button>
           ) : null}
           {inlineTickers.map((t) => (
