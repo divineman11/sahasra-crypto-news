@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, ExternalLink, Loader2 } from "lucide-react";
+import { CoinSummaryCard } from "@/components/explain/CoinSummaryCard";
 import { TopBar } from "@/components/TopBar";
 import type { PostDTO } from "@/lib/types";
 import type { SourceTab } from "@/lib/sourceTab";
@@ -196,6 +197,7 @@ export default function CoinPage() {
               {name ? <span className="text-slate-500">{name}</span> : null}
             </div>
 
+            <CoinSummaryCard ticker={ticker} />
             <div className="mt-2 flex flex-wrap gap-3 text-[11px] text-slate-500">
               <span>
                 48h:{" "}
