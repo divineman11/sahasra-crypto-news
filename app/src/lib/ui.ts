@@ -14,6 +14,7 @@ import type { Category, Kind } from "@/lib/types";
 export const CATEGORY_STYLE: Record<Category, { label: string; cls: string }> = {
   listing: { label: "LISTING", cls: "text-emerald-400 border-emerald-500/50" },
   delisting: { label: "DELISTING", cls: "text-rose-400 border-rose-500/50" },
+  unlock: { label: "🔴 Big unlock", cls: "text-red-400 border-red-500/60 bg-red-500/10" },
   hack: { label: "HACK", cls: "text-red-400 border-red-500/60 bg-red-500/10" },
   etf: { label: "ETF", cls: "text-sky-400 border-sky-500/50" },
   regulatory: { label: "REGULATORY", cls: "text-amber-400 border-amber-500/50" },

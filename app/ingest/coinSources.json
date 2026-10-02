@@ -634,5 +634,20 @@
   ],
   "ambiguous": true,
   "query": "\"Sei Network\" OR \"Sei blockchain\" OR \"SEI token\""
+ },
+ "2Z": {
+  "name": "DoubleZero",
+  "aliases": [
+   "DoubleZero",
+   "Double Zero",
+   "DoubleZero (2Z)",
+   "2Z token",
+   "DoubleZero Foundation"
+  ],
+  "weak": [
+   "2Z"
+  ],
+  "ambiguous": true,
+  "query": "\"DoubleZero\" OR \"2Z token\""
  }
 }

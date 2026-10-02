@@ -11,9 +11,12 @@ const REGEXPS = {
   maintenance: /\b(maintenance|suspend(s|ed)?|paus(e|es|ed)|deposits?|withdrawals?|network upgrade|hard fork)\b/i,
 };
 
-const CATEGORY_ORDER = ['hack', 'delisting', 'etf', 'listing', 'regulatory', 'maintenance'];
+// Token unlocks / vesting cliffs / emissions. Tested right after delisting, before listing.
+REGEXPS.unlock = /\b(unlock(s|ed|ing)?|vesting cliffs?|token releases?|emissions?|tokens? (will )?(be )?unlocked)\b/i;
 
-const IMPORTANCE_NEWS = { listing: 60, delisting: 60, hack: 85, etf: 70, regulatory: 70, maintenance: 30, other: 20 };
+const CATEGORY_ORDER = ['hack', 'delisting', 'unlock', 'etf', 'listing', 'regulatory', 'maintenance'];
+
+const IMPORTANCE_NEWS = { listing: 60, delisting: 60, hack: 85, unlock: 60, etf: 70, regulatory: 70, maintenance: 30, other: 20 };
 const IMPORTANCE_EXCHANGE = { listing: 95, delisting: 90, maintenance: 40, other: 30 };
 // Official project sources (): baseline importance by sourceName prefix
 // (gh:<org>/<repo> release, forum:<host> governance topic, blog:<host> post), used only when
@@ -113,9 +116,27 @@ function detectCategory(raw) {
   return { category: 'other', phishing: false };
 }
 
+// Token amount ("1.66B", "1.655 billion", "113M tokens") and % of supply ("16.3% of total supply").
+const UNLOCK_AMOUNT_RE = /(?<![$\d.,])(\d[\d,]*(?:\.\d+)?)\s*(billion|million|thousand|bn|b|m|k)\b(?!\s*(?:usd|dollars?|worth))/i;
+const UNLOCK_PCT_RE = /(\d+(?:\.\d+)?)\s*%\s*of\s+(?:the\s+)?(?:(?:total|circulating|current|max(?:imum)?|token)\s+)*(?:supply|circulation)/i;
+const UNIT_MULT = { billion: 1e9, bn: 1e9, b: 1e9, million: 1e6, m: 1e6, thousand: 1e3, k: 1e3 };
+
+function parseUnlock(title) {
+  let amount = null;
+  let m = UNLOCK_AMOUNT_RE.exec(title);
+  if (m) {
+    const n = parseFloat(m[1].replace(/,/g, ''));
+    if (isFinite(n)) amount = Math.round(n * UNIT_MULT[m[2].toLowerCase()]);
+  }
+  let pct = null;
+  m = UNLOCK_PCT_RE.exec(title);
+  if (m) pct = parseFloat(m[1]);
+  return { amount, pct };
+}
+
 function sentimentFor(category, title) {
   if (category === 'listing') return 'bullish';
-  if (category === 'delisting' || category === 'hack') return 'bearish';
+  if (category === 'delisting' || category === 'hack' || category === 'unlock') return 'bearish';
   if (category === 'etf') return etfSentiment(title);
   if (category === 'regulatory') {
     return regulatorySentiment(title); // Settlements stay neutral (ambiguous).
@@ -211,6 +232,11 @@ function classify(raw, tickers) {
   } else {
     importance = IMPORTANCE_NEWS[category] !== undefined ? IMPORTANCE_NEWS[category] : 20;
   }
+  let unlockInfo = null;
+  if (category === 'unlock') {
+    unlockInfo = parseUnlock(title);
+    importance = (unlockInfo.pct !== null && unlockInfo.pct >= 5) || (unlockInfo.amount !== null && unlockInfo.amount >= 1e9) ? 80 : 60;
+  }
   if (importanceOverride !== null) importance = importanceOverride;
   // Tier-4 (per-coin search) filler: price-move bots, predictions, listicles.
   if (kind === 'news' && Number(raw.sourceTier) === 4 && category === 'other' && (OPINION_RE.test(title) || LOWVALUE_RE.test(title))) importance = 10;
@@ -228,7 +254,12 @@ function classify(raw, tickers) {
   // Per-item importance cap (whale_alert_io telegram items force importance <=10
   // via a per-channel `maxImportance` option on the raw item) — generic, so any adapter can use
   // it. Applied last, in withCap, so it covers this return path and the two early returns above.
-  return withCap(raw, { category, importance, sentiment });
+  const out = { category, importance, sentiment };
+  if (unlockInfo) {
+    out.unlockAmount = unlockInfo.amount;
+    out.unlockPct = unlockInfo.pct;
+  }
+  return withCap(raw, out);
 }
 
 module.exports = { classify };
