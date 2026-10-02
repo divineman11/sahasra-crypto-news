@@ -1,6 +1,7 @@
 'use strict';
 
 const { STOCK_PERP_TITLE_RE: STOCK_PERP_RE } = require('./tickers');
+const { matchStrength } = require('./coinMatch');
 
 const REGEXPS = {
   hack: /\b(hacked|hackers?|hack (of|on|at|hits|drains)|exploit(ed|er)?|exploits? (of|on|in|at)|drained|drainer|stolen|security breach|data breach|breach of|attacker|rug ?pull(ed)?|compromised)\b/i,
@@ -16,6 +17,23 @@ const REGEXPS = {
 const UNLOCK_POS_RE = /\b(token unlocks?|vesting (cliff|schedule)s?|cliff unlocks?|token emissions?|tokens? (will )?(be )?unlocked|unlock(s|ed|ing)?\b[^.]{0,60}\b(tokens?|supply|circulation|coins|(?<![$€£¥\d.,])(?<![$€£¥]\s)\d+(\.\d+)?\s*(%|((bn|[bmk]|billion|million)\b(?!\s*(usd|dollars?|euros?|pounds?)))))|\d[\d,.]*\s*%\s*of\b[^.]{0,30}\b(supply|circulating|tokens?)\b[^.]{0,30}\bunlock|(\d[\d,.]*\s*(bn|[bmk]|billion|million)?|\$[\d.,]+[bmk]?)\s*(worth of\s+)?([A-Za-z0-9]{2,10}\s+)?tokens?\b[^.]{0,30}\b(unlock|releas|vest|enter|hit)|releas(e|es|ed|ing)\s+[\d$][\d,.]*\s*(bn|[bmk]|billion|million)?\s*tokens?\b)/i;
 const UNLOCK_NEG_RE = /\b(release notes|releases?\s+v\d|(software|protocol|mainnet|client|press) release|unlocks? (new|access|features?|staking|support|power|potential|liquidity)|carbon emissions|imf|world bank|loans?|bail-?outs?|credit lines?|tranches?|disburse(s|d|ments?)?|(in|of) funding|funding for|funds? for)\b/i;
 REGEXPS.unlock = { test: (s) => UNLOCK_POS_RE.test(s) && !UNLOCK_NEG_RE.test(s) };
+// Coin-anchored unlock rule: a headline that names a matched coin AND uses unlock/vesting/cliff
+// wording is an unlock even with no token word or token amount ("2Z gains 21% ahead of Oct. 2 unlock").
+// Needs a coin matched in the TITLE itself (not just a hint ticker); the NEG list (plus macro/loan
+// words) still blocks "unlocks new feature", IMF/World Bank loans, etc.
+const UNLOCK_WORD_RE = /\b(unlock(s|ed|ing)?|vesting|cliff)\b/i;
+const UNLOCK_ANCHOR_NEG_RE = /\bunlock(s|ed|ing)?\s+(the\s+)?(power|potential|value|future|door|doors|secrets?)\b|\bto unlock\b/i;
+// "unlock" must be used as a supply EVENT (noun: "its $124M unlock?", "Oct. 2 Unlock", "faces an unlock test"),
+// not as a verb with an abstract object ("unlocks a $150T market", "unlock 24/7 financing", "unlocked its breakout").
+const UNLOCK_NOUN_USE_RE = /\b(vesting|cliff)\b|\bunlock(s|ed|ing)?(?=\s*(?:$|[?!.,:;)\]'"\u2019\u2014\u2013-]|(?:today|tomorrow|next|test|news|pressure|chatter|schedule|event|nears?|looms?|looming|scares?|risk|fears?|wave|ahead|amid|in|on|of|for|from|and|but|as|after|before|with|at|is|are|will|could|may|adds?|hits?|weighs?|drains?|rattles?|spooks?|approaches)\b)|\s+(?:roughly|about|around|approximately|nearly|over)?\s*\$?\d[\d.,]*\s*(?:[kmb]|million|billion)?\s*(?:of\s+|worth\s+of\s+)?[A-Z][A-Z0-9]{1,9}\b)/i;
+function coinAnchoredUnlock(title, tickers) {
+  if (!UNLOCK_WORD_RE.test(title) || UNLOCK_NEG_RE.test(title) || UNLOCK_ANCHOR_NEG_RE.test(title) || !UNLOCK_NOUN_USE_RE.test(title)) return false;
+  for (const t of tickers || []) {
+    try { if (matchStrength(title, t) > 0) return true; } catch (e) { /* ignore */ }
+  }
+  return false;
+}
+
 
 const CATEGORY_ORDER = ['hack', 'delisting', 'unlock', 'etf', 'listing', 'regulatory', 'maintenance'];
 
@@ -185,6 +203,7 @@ function classify(raw, tickers) {
   const detected = detectCategory(raw);
   let category = detected.category;
   const isPhishing = detected.phishing;
+  if (category === 'other' && !isPhishing && !raw.hintCategory && typeof raw.maxImportance !== 'number' && coinAnchoredUnlock(title, tickers)) category = 'unlock';
 
   // Binance Alpha is not a spot listing — downgrade listings only, never a hack/delisting/other material event.
   if (ALPHA_LISTING_RE.test(title) && (category === 'listing' || category === 'other' || category == null)) {

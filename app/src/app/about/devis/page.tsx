@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { TopBar } from "@/components/TopBar";
-import { DEVI, DeviMark } from "@/components/devi";
+import { DEVI, GUARDIAN, DeviMark } from "@/components/devi";
 
 export const metadata = { title: "The ten lenses | Sahasra" };
 
@@ -36,6 +36,21 @@ export default function DevisPage() {
               </li>
             ))}
           </ul>
+
+          <h2 className="mt-8 text-[10px] uppercase tracking-wider text-slate-500">Guardian</h2>
+          <div id={GUARDIAN.key} className="devi-legend-item mt-2 flex gap-3 rounded border border-indigo-500/30 p-3" data-devi={GUARDIAN.key} data-testid="guardian-card">
+            <span className="shrink-0">
+              <DeviMark devi={GUARDIAN.key} size={64} play replay />
+            </span>
+            <div className="min-w-0">
+              <h2 className="font-sans text-sm font-semibold text-slate-100">
+                {GUARDIAN.name} <span className="font-normal text-slate-500">(Guardian: Warnings &amp; safety)</span>
+              </h2>
+              <p className="mt-0.5 text-[10px] uppercase tracking-wider text-cyan-300">Used for: {GUARDIAN.lens}</p>
+              <p className="mt-1 text-slate-300">{GUARDIAN.meaning} It marks the &quot;What deserves attention&quot; banner and the setup page, where Sahasra tells you what is switched off.</p>
+              <p className="mt-1 text-[10px] text-slate-500">{GUARDIAN.tooltip} A trident and an hourglass drum inside a circle that closes once. Decorative; no figure and no claims about markets.</p>
+            </div>
+          </div>
         </main>
       </div>
     </div>

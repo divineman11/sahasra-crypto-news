@@ -34,6 +34,9 @@ const reddit = require('./ingest/adapters/reddit');
 const bluesky = require('./ingest/adapters/bluesky');
 const trump = require('./ingest/adapters/trump');
 const { loadWatchBases } = require('./ingest/watchlist');
+const { createService: createUnlockService } = require('./ingest/unlocks');
+const { computeStatus, formatBanner } = require('./ingest/setupStatus');
+const { startHeartbeat, CACHE_DIR } = require('./ingest/heartbeat');
 
 const TIER_CACHE_FILE = path.join(__dirname, 'ingest', 'cache', 'gnews_tiers.json');
 
@@ -63,6 +66,9 @@ function saveTierCache(tierBList, tierCList) {
 async function main() {
   const prisma = new PrismaClient();
   const redis = createRedis();
+
+  // Safety banner: say plainly which protections are ON and which are OFF (and how to fix each OFF one).
+  try { console.log(formatBanner(computeStatus({ env: process.env, cacheDir: CACHE_DIR, phase: 'startup' }), { port: 4180 })); } catch (e) { console.error('[ingest] banner error:', e.message || e); }
 
   await loadUniverse();
   const universeTimer = setInterval(() => { loadUniverse({ force: true }).catch((e) => console.error('[ingest] universe refresh error:', e.message)); }, 24 * 3600 * 1000);
@@ -207,6 +213,10 @@ async function main() {
   const stopWeekly = startWeeklyReport({ prisma, redis, alerts });
   const stopAlertWorker = startAlertWorker({ prisma, redis, alerts });
   const stopRepublish = startRepublish({ prisma, redis });
+  const stopHeartbeat = startHeartbeat({ scheduler, redis });
+  // Unlock calendar: DefiLlama + Tokenomics every 6 h, optional Discord reminders and weekly AI cross-check.
+  const unlockService = createUnlockService({ alerts });
+  const stopUnlocks = unlockService.start();
 
   console.log(`[ingest] started ${adapters.length} adapters`);
 
@@ -224,6 +234,8 @@ async function main() {
       if (typeof stopWeekly === 'function') stopWeekly();
       if (typeof stopAlertWorker === 'function') stopAlertWorker();
       if (typeof stopRepublish === 'function') stopRepublish();
+      if (typeof stopHeartbeat === 'function') stopHeartbeat();
+      if (typeof stopUnlocks === 'function') stopUnlocks();
       await prisma.$disconnect();
       redis.quit();
     } catch (_) {

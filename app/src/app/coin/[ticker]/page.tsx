@@ -10,6 +10,7 @@ import type { SourceTab } from "@/lib/sourceTab";
 import { ageMs, fmtAge, groupStories, isFresh, type StoryView } from "@/lib/filters";
 import { CATEGORY_STYLE, fmtDateTime, fmtPubTime, kindIcon } from "@/lib/ui";
 import { mediaThumb } from "@/lib/mediaThumb";
+import { CoinNextUnlock } from "@/components/CoinNextUnlock";
 
 type Range = "48h" | "7d";
 type Tab = "all" | SourceTab;
@@ -207,6 +208,8 @@ export default function CoinPage() {
                 <span className="text-emerald-400">{headline7d ? headline7d.important : "…"}</span> important
               </span>
             </div>
+
+            <CoinNextUnlock ticker={ticker} />
 
             <div className="mt-4 flex flex-wrap items-center gap-2">
               {(["48h", "7d"] as const).map((r) => (

@@ -13,6 +13,7 @@ const outcomesLib = require('./outcomes');
 const baseRatesLib = require('./baseRates');
 const { etDay } = require('./timeET');
 const { NEG_RE } = require('../classify');
+const unlockLookup = require('../unlocks/lookup');
 
 const HOUR = 3600e3;
 const MAX_PER_HOUR = 3;
@@ -130,8 +131,21 @@ function createEngine(opts = {}) {
     return Object.assign({ ts, kind, source: info.domain, title: post.title, url: post.url, post_id: post.id }, info);
   }
 
+  // The unlock calendar fills in size / date / "just unlocked" when the headline lacks them.
+  function enrichUnlock(post, now) {
+    if (!post || post.category !== 'unlock' || !post.tickers || !post.tickers[0]) return post;
+    let cal = null;
+    try { cal = (opts.unlockLookup || unlockLookup.lookupUnlock)(post.tickers[0], now); } catch (e) { cal = null; }
+    if (!cal) return post;
+    const out = Object.assign({}, post, { unlockCal: cal });
+    if (out.unlockPct == null && cal.pct != null) { out.unlockPct = cal.pct; out.unlockPctBasis = 'circulating'; }
+    if (out.unlockAmount == null && cal.tokens != null) out.unlockAmount = cal.tokens;
+    return out;
+  }
+
   function consider(post) {
     const now = nowFn();
+    post = enrichUnlock(post, now);
     const nowIso = new Date(now).toISOString();
     const g = gate.evaluate(post, { now });
     if (!g.pass) return null;

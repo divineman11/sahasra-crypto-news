@@ -1,4 +1,4 @@
-export { DEVI, DEVI_BY_KEY } from "./registry";
+export { DEVI, DEVI_BY_KEY, GUARDIAN } from "./registry";
 export type { DeviEntry, DeviKey } from "./registry";
 export { DeviMark } from "./DeviMark";
 export type { DeviProps } from "./shapes";
@@ -12,3 +12,4 @@ export { Bhairavi } from "./Bhairavi";
 export { Bagalamukhi } from "./Bagalamukhi";
 export { Dhumavati } from "./Dhumavati";
 export { Matangi } from "./Matangi";
+export { Bhairava } from "./Bhairava";

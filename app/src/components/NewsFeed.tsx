@@ -5,6 +5,7 @@ import { useFeedStore, MAX_POSTS } from "@/store/useFeedStore";
 import { visibleStories } from "@/lib/filters";
 import { fetchOlder } from "@/lib/feedApi";
 import { FeedRow, FEED_GRID_COLS } from "@/components/FeedRow";
+import { AttentionBanner } from "@/components/AttentionBanner";
 import { ArrowUp, History } from "lucide-react";
 
 export function NewsFeed() {
@@ -111,6 +112,7 @@ export function NewsFeed() {
         }}
         className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden"
       >
+        <AttentionBanner />
         {pendingCount > 0 && (
           <button
             onClick={() => {

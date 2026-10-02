@@ -13,6 +13,8 @@ import {
   AlertCircle,
   Bookmark,
   Flag,
+  CalendarClock,
+  ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { DeviMark } from "@/components/devi";
@@ -99,6 +101,26 @@ export function LeftSidebar() {
             Ten lenses
           </span>
           <span className="font-mono text-[10px] text-slate-500">10</span>
+        </Link>
+        <Link
+          href="/unlocks"
+          title="Upcoming token unlocks"
+          className="flex items-center justify-between rounded px-2 py-1.5 text-left text-xs font-medium text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-slate-200"
+        >
+          <span className="flex items-center gap-2">
+            <CalendarClock size={14} />
+            Unlocks
+          </span>
+        </Link>
+        <Link
+          href="/setup"
+          title="Setup and safety status: what is switched on, what is off"
+          className="flex items-center justify-between rounded px-2 py-1.5 text-left text-xs font-medium text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-slate-200"
+        >
+          <span className="flex items-center gap-2">
+            <ShieldCheck size={14} />
+            Setup
+          </span>
         </Link>
       </nav>
 

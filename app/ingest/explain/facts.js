@@ -53,7 +53,7 @@ function extractFacts(post, ctx) {
     kind: post.kind || 'news',
     url: post.url || null,
     published_at: isFinite(pubMs) ? new Date(pubMs).toISOString() : null,
-    unlock_pct_circ: null, unlock_pct: null, unlock_pct_basis: null, unlock_tokens: null, unlock_date_et: null,
+    unlock_pct_circ: null, unlock_pct: null, unlock_past: false, unlock_source: null, unlock_pct_basis: null, unlock_tokens: null, unlock_date_et: null,
     amount_usd: null, exchange: capExchange(post.exchange), market: null,
     price_t0: null, btc_t0: null, range_24h_pct: null,
     peg_usd: null, what_paused: null, body: null, event_date_et: null,
@@ -67,6 +67,15 @@ function extractFacts(post, ctx) {
     }
     if (f.unlock_tokens == null && post.unlockAmount != null) f.unlock_tokens = Math.round(post.unlockAmount);
     if (f.unlock_date_et == null) f.unlock_date_et = titleDate(title);
+    // Unlock calendar fills in what the headline lacks (see unlocks/lookup.js); never overrides a headline number.
+    const cal = post.unlockCal;
+    if (cal) {
+      f.unlock_source = 'calendar';
+      if (f.unlock_pct_circ == null && cal.pct != null) f.unlock_pct_circ = r1(cal.pct);
+      if (f.unlock_tokens == null && cal.tokens != null) f.unlock_tokens = Math.round(cal.tokens);
+      if (cal.past) { f.unlock_past = true; f.unlock_date_et = etShort(cal.ts * 1000); }
+      else if (f.unlock_date_et == null) f.unlock_date_et = etShort(cal.ts * 1000);
+    }
   }
   if (cat === 'hack') f.amount_usd = parseUsd(title);
   if (sub === 'depeg') f.peg_usd = 1;
@@ -96,6 +105,8 @@ function mergeFacts(cur, nxt) {
   if (out.unlock_pct_circ != null && (cur.unlock_pct_basis !== 'circulating')) { out.unlock_pct = out.unlock_pct_circ; out.unlock_pct_basis = 'circulating'; }
   else if (out.unlock_pct_circ == null) { out.unlock_pct = max(cur.unlock_pct, nxt.unlock_pct); out.unlock_pct_basis = cur.unlock_pct_basis || nxt.unlock_pct_basis; }
   out.unlock_tokens = max(cur.unlock_tokens, nxt.unlock_tokens);
+  if (cur.unlock_past || nxt.unlock_past) out.unlock_past = true;
+  if (cur.unlock_source || nxt.unlock_source) out.unlock_source = cur.unlock_source || nxt.unlock_source;
   out.amount_usd = max(cur.amount_usd, nxt.amount_usd);
   for (const k of ['unlock_date_et', 'market', 'event_date_et', 'what_paused', 'body', 'exchange', 'peg_usd']) if (out[k] == null) out[k] = nxt[k];
   const better = nxt.source_tier < cur.source_tier || (nxt.source_tier === cur.source_tier && Date.parse(nxt.published_at) > Date.parse(cur.published_at));

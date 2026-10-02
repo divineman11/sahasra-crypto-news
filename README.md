@@ -167,3 +167,13 @@ When a story passes a big-news gate (a large token unlock, a hack or stablecoin 
 - Personal, self-hosted, non-commercial project. Respect each source's terms of use; polling intervals are deliberately conservative.
 - Stories are kept for 7 days.
 - Nothing here is financial advice.
+---
+
+## Unlock safety & setup checklist
+
+- **Upcoming unlocks:** `http://localhost:4180/unlocks`. Badges flag **SUPPLY SHOCK** (≥5% of circulating supply), sources that disagree, missing data, and 6/12-month launch anniversaries. Refresh with `npm run unlocks:fetch`.
+- **Setup status:** run `npm run setup:status` or open `http://localhost:4180/setup`. The Guardian banner in the app lists anything important that is switched off, with a "how to turn it on" link.
+- **Weekly AI cross-check (recommended):** calendars can miss or under-count unlocks. Point `UNLOCK_CROSSCHECK_CMD` at your own web-search-capable AI. The prompt is `docs/unlock-crosscheck-prompt.md` and an example wrapper is `app/scripts/crosscheck.example.js`.
+- **Using an AI assistant to set this up?** It should read **`AGENTS.md`** / **`CLAUDE.md`**, which list the setup steps and the safety rules.
+
+*Sahasra explains news. It is not financial advice.*

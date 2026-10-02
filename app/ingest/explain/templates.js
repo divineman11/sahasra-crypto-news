@@ -36,13 +36,18 @@ function unlock(f) {
   const d = f.unlock_date_et;
   let what;
   const tp = f.unlock_pct;
-  if (pct == null && tp != null && d) what = `On ${d} coins equal to about ${tp}% of all ${T} that will ever exist become free to trade.`;
+  if (f.unlock_past) {
+    // The unlock calendar says it happened within the last 24 hours: past tense.
+    if (pct != null) what = d ? `On ${d} about ${pct}% more ${T} coins became free to trade.` : `About ${pct}% more ${T} coins just became free to trade.`;
+    else what = d ? `On ${d} a large batch of ${T} coins became free to trade.` : `A large batch of ${T} coins just became free to trade.`;
+  } else if (pct == null && tp != null && d) what = `On ${d} coins equal to about ${tp}% of all ${T} that will ever exist become free to trade.`;
   else if (pct == null && tp != null) what = `Coins equal to about ${tp}% of all ${T} that will ever exist are due to become free to trade soon.`;
   else if (pct != null && d) what = `On ${d} about ${pct}% more ${T} coins become free to trade.`
   else if (pct != null) what = `About ${pct}% more ${T} coins are due to become free to trade soon.`;
   else what = `A large batch of ${T} coins is due to become free to trade.`;
   if (f.unlock_tokens != null) what += ` That is ${fmtCount(f.unlock_tokens)} coins.`;
   const uncertain = ['Which wallets receive the coins is not confirmed.'];
+  if (f.unlock_source === 'calendar') uncertain.push('The size comes from public unlock trackers, not from the headline, and trackers can differ.');
   if (pct == null && tp != null) uncertain.push('How many coins already trade is not stated.');
   uncertain.push(NO_CASES);
   return {

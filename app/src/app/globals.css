@@ -215,6 +215,8 @@ a:hover {
   --devi-dhumavati-2: #e6e9ef;
   --devi-matangi: #19c37d;
   --devi-matangi-2: #14b8a6;
+  --devi-bhairava: #7b86ff;
+  --devi-bhairava-2: #ff9f1c;
   --ex-bg: #0a0d1c;
   --ex-fg: #e6ebf5;
   --ex-muted: #9aa6bd;
@@ -252,6 +254,8 @@ a:hover {
   --devi-dhumavati-2: #8a93a3;
   --devi-matangi: #0f8a58;
   --devi-matangi-2: #14b8a6;
+  --devi-bhairava: #4338ca;
+  --devi-bhairava-2: #c2410c;
   --ex-bg: #fbfcff;
   --ex-fg: #0f172a;
   --ex-muted: #475569;
@@ -280,6 +284,7 @@ a:hover {
 .devi-bagalamukhi { color: var(--devi-bagalamukhi); }
 .devi-dhumavati { color: var(--devi-dhumavati); }
 .devi-matangi { color: var(--devi-matangi); }
+.devi-bhairava { color: var(--devi-bhairava); }
 
 .explain-card {
   background: var(--ex-bg);
@@ -437,6 +442,12 @@ a:hover {
 .devi.is-playing .devi-matangi-string4 { animation-delay: 0.45s; }
 @keyframes devi-matangi-string { 0% { transform: scaleY(1.4); } 25% { transform: scaleY(0.8); } 50% { transform: scaleY(1.15); } 75% { transform: scaleY(0.95); } 100% { transform: scaleY(1); } }
 
+/* Bhairava (guardian): the guarding circle closes once around the trident (2.5 s); the final frame is the closed circle */
+.devi.is-playing .devi-bhairava-circle { stroke-dasharray: 1; animation: devi-bhairava-circle 2.5s var(--devi-ease) 1 both; }
+.devi.is-playing .devi-bhairava-damaru { animation: devi-bhairava-damaru 2.5s var(--devi-ease) 1 both; }
+@keyframes devi-bhairava-circle { 0% { stroke-dashoffset: 0.82; } 80%, 100% { stroke-dashoffset: 0; } }
+@keyframes devi-bhairava-damaru { 0%, 55% { opacity: 0.25; } 100% { opacity: 1; } }
+
 @media (prefers-reduced-motion: reduce) {
   .devi, .devi * { animation: none !important; }
 }
@@ -510,3 +521,17 @@ a:hover {
 @media (max-width: 640px) {
   .explain-card .ex-header { margin: -10px -12px 0; padding: 10px 12px 8px; }
 }
+
+/* ───────────────────────── Unlock calendar badges + attention banner ───────────────────────── */
+.un-badge { display: inline-block; border: 1px solid currentColor; border-radius: 3px; padding: 0 4px; font-size: 9px; line-height: 14px; letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
+.un-badge-shock { color: var(--neon-red); box-shadow: 0 0 6px rgba(255, 56, 96, 0.35); }
+.un-badge-disagree { color: var(--neon-amber); }
+.un-badge-missing { color: var(--neon-violet); }
+.un-badge-anniv { color: var(--neon-cyan); }
+.un-badge-cross { color: var(--neon-magenta); }
+.un-badge-past { color: var(--neon-lime); }
+.attention-banner { border: 1px solid rgba(123, 134, 255, 0.55); background: rgba(24, 24, 60, 0.45); box-shadow: 0 0 14px rgba(123, 134, 255, 0.18), inset 0 0 12px rgba(255, 159, 28, 0.05); }
+.setup-state { display: inline-block; min-width: 44px; text-align: center; border: 1px solid currentColor; border-radius: 3px; padding: 0 6px; font-size: 10px; letter-spacing: 0.06em; }
+.setup-on { color: var(--neon-lime); }
+.setup-off { color: var(--neon-red); }
+.setup-warn { color: var(--neon-amber); }

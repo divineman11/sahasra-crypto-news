@@ -64,7 +64,7 @@ function evaluate(post, opts = {}) {
   // 1. unlock supply shock
   if (cat === 'unlock') {
     // >= 5% of total/max supply implies >= 5% of circulating, so any basis qualifies.
-    if (post.unlockPct != null && post.unlockPct >= 5 && ticker) return out('unlock', 'supply_shock', 'unlock >= 5% of supply (news, basis ' + (post.unlockPctBasis || 'unstated') + ')');
+    if (post.unlockPct != null && post.unlockPct >= 5 && ticker) return out('unlock', 'supply_shock', 'unlock >= 5% of supply (' + (post.unlockCal ? 'unlock calendar' : 'news') + ', basis ' + (post.unlockPctBasis || 'unstated') + ')');
     return no('unlock below 5% of circulating / unconfirmed');
   }
   // 3. listing / delisting on a top exchange

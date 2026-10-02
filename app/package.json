@@ -15,7 +15,12 @@
     "redis:start": "npm run redis",
     "all": "concurrently --restart-tries 3 --restart-after 2000 -n redis,next,ws,ingest -c red,cyan,magenta,yellow \"npm:redis\" \"npm:dev\" \"npm:ws\" \"npm:ingest\"",
     "all:lite": "concurrently --restart-tries 3 --restart-after 2000 -n next,ingest -c cyan,yellow \"npm:dev\" \"npm:ingest:lite\"",
-    "all:prod": "concurrently --restart-tries 3 --restart-after 2000 -n redis,web,ws,ingest -c red,cyan,magenta,yellow \"npm:redis\" \"npm:start\" \"npm:ws\" \"npm:ingest\""
+    "all:prod": "concurrently --restart-tries 3 --restart-after 2000 -n redis,web,ws,ingest -c red,cyan,magenta,yellow \"npm:redis\" \"npm:start\" \"npm:ws\" \"npm:ingest\"",
+    "test": "node --test",
+    "unlocks:fetch": "node scripts/unlocks.js fetch",
+    "unlocks:crosscheck": "node scripts/unlocks.js crosscheck",
+    "unlocks:print": "node scripts/unlocks.js print",
+    "setup:status": "node scripts/setup-status.js"
   },
   "dependencies": {
     "@prisma/client": "^6.2.0",

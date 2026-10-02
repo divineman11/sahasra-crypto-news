@@ -191,5 +191,23 @@
         "accentLight": "#14b8a6"
       }
     }
-  ]
+  ],
+  "guardian": {
+    "key": "bhairava",
+    "name": "Bhairava",
+    "iast": "Bhairava",
+    "lens": "Warnings & safety",
+    "meaning": "Guardianship and time: a watchful keeper of the gates.",
+    "tooltip": "Inspired by Bhairava's association with guardianship and time; a contemporary editorial interpretation.",
+    "component": "Bhairava",
+    "accentVar": "--devi-bhairava",
+    "accentVar2": "--devi-bhairava-2",
+    "emblem": "trident and hourglass inside a closing circle",
+    "colours": {
+      "dark": "#7b86ff",
+      "light": "#4338ca",
+      "accentDark": "#ff9f1c",
+      "accentLight": "#c2410c"
+    }
+  }
 }
